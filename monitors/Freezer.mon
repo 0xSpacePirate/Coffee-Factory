@@ -1,0 +1,9 @@
+
+/** This monitor is responsible for ...  */
+monitor Freezer {
+	action onload() {
+		log "Loaded monitor Freeze" at INFO;
+		
+		
+	}
+}

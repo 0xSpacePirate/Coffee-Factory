@@ -1,0 +1,123 @@
+using com.apama.correlator.Component;
+
+monitor RoastDrum {
+	
+	integer beanIllustrator := 1; //parses the number so the program can display the actual color of the bean in a range from 1 to 100; Where 1 is green and very black is 100;
+	integer currentBeanTemp := 0; // average temp;
+
+	float currentDrumTemp := preheatDrum(); // default temp in drum before roasting is just below 200, e.g. 190;
+	float currentBeanVolt := BeanColorVolt.MAXIMUM; 
+	
+	boolean highTemperatureReached := false;
+
+	action onload() {
+		log Message.LOADED at INFO;
+		initialize();
+	}
+
+	action initialize(){
+			heatDrum();
+			colorTrack();
+	}
+	
+	/** 
+	@return ...
+	*/
+	action preheatDrum() returns float{
+		float startTemp := (Temperature.PREHEAT_NUMBER).rand() + BeanTemp.PALE; 
+		return startTemp;
+	}
+	
+	/** 
+		...
+	*/
+	action heatDrum(){		
+		listener listen := on all wait (Delay.TWO_SECONDS){
+			float randomTemp := (BeanRandom.TEMP_INCREMENTER).rand();	
+			if checkTempIfTooHigh() {
+				randomTemp := -randomTemp;
+				terminateHeatIfTooLow(listen);
+			}				
+			currentDrumTemp := (currentDrumTemp + randomTemp);
+			Component.setUserStatus(Userstatus.DRUM, currentDrumTemp.toString());			
+		}
+	}
+	
+	/** 
+	@param listen ...
+	*/
+	action terminateHeatIfTooLow(listener listen){
+		if currentDrumTemp <= Temperature.DRUM_MINIMUM {
+			listen.quit();
+		}
+	}
+	
+	/** 
+	@return ...
+	*/
+	action checkTempIfTooHigh() returns boolean{
+		if currentDrumTemp >= Temperature.IMMINENT_FIRE {
+			highTemperatureReached := true;
+		}
+		return highTemperatureReached;
+	}
+		
+	/** 
+		....
+	*/
+	action colorTrack(){		
+		listener listen := on all wait (Delay.EACH_SECOND){
+			float randomVoltIncrease := (BeanTracker.COLOR_CHANGER).rand(); // the beans spin while in the drum, therefore their temperature might differ slightly. Plus, making the graph more realistic;
+			float gate := (BeanRandom.GATE_BOUND).rand();
+			integer beanColorIllustrator := getBeanIllustrator(currentBeanVolt);
+
+			implementBeanVolt(gate, randomVoltIncrease);
+			
+			Component.setUserStatus(Userstatus.BEAN_COLOR, currentBeanVolt.toString());
+			Component.setUserStatus(Userstatus.BEAN_ILLUSTRATOR, beanColorIllustrator.toString());
+			
+			terminateVoltIfTooLow(listen);
+		}
+	}
+	
+	
+	/** 
+	@param listen ...
+	*/
+	action terminateVoltIfTooLow(listener listen){
+		if currentBeanVolt <= BeanColorVolt.MINIMUM {
+			listen.quit();
+		}
+	}
+	
+	/** 
+	@param gate ...
+	@param randomVoltIncrease ...
+	*/
+	action implementBeanVolt(float gate, float randomVoltIncrease){
+		if gate <= BeanTracker.COLOR_GATE_ENTRY {
+			currentBeanVolt := currentBeanVolt + randomVoltIncrease;
+		}else{
+			currentBeanVolt := currentBeanVolt - BeanTracker.COLOR_CHANGER; // 0-100 Volts DC; 280 maximum temp in drum -> 280/100 = 2.8; Therefore, 2.8 decrease per degree celsius;
+		}
+		
+	}
+	
+	/** 
+	@param beanVolt ...
+	@return ....
+	*/
+	action getBeanIllustrator(float beanVolt) returns integer {
+		return (getHalf(beanVolt) - ColorScheme.SIZE).abs(); // formula: the color scheme graph contains half the range the beanvolt has
+		//(i.e. BeanVolt starts at 100 and goes down to 0, colorScheme starts at 0 and goes up to 50).
+		//Hence, get half of bean volt and remove 50 since the colorScheme operates in the 0-50 range;
+	}
+	
+	/** 
+	@param value ...
+	*/
+	action getHalf(float value) returns integer{
+		return value.floor() / Divider.BY_HALF;
+	}
+	
+}

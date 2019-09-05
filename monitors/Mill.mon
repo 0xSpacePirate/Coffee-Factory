@@ -1,0 +1,9 @@
+
+/** This monitor is responsible for ...  */
+monitor Mill {
+	action onload() {
+		log "Loaded monitor Mill" at INFO;
+		
+		
+	}
+}

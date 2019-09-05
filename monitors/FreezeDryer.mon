@@ -1,0 +1,9 @@
+
+/** This monitor is responsible for ...  */
+monitor FreezeDryer {
+	action onload() {
+		log "Loaded monitor FreezeDryer" at INFO;
+		
+		
+	}
+}

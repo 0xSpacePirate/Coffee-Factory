@@ -1,0 +1,9 @@
+
+/** This monitor is responsible for ...  */
+monitor Extractor {
+	action onload() {
+		log "Loaded monitor Extract" at INFO;
+		
+		
+	}
+}
