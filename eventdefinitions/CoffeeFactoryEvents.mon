@@ -1,5 +1,6 @@
 
 /** This event consists of events full of constants which are used in the RoastDrum.mon file */
+
 event BeanColor{
 	constant integer VERY_LIGHT := 90;
 	constant integer LIGHT := 80;
@@ -26,7 +27,7 @@ event BeanColorVolt{
 event BeanTemp{
 	// ALL values below are temperatures in celsius.
 	//The names of the constants represent the color of the beans at the specific temperatures;
-	constant float PALE := 136.0;
+	constant float PALE := 131.0;
 	constant integer LIGHT_BROWN := 198;
 	constant integer MEDIUM_LIGHT_BROWN := 207;
 	constant integer FULL_MEDIUM := 218;
@@ -36,28 +37,69 @@ event BeanTemp{
 	
 }
 
+event FreezerTemp{
+	constant float RANDOM_FLUCTUATION_NUMBER := 2.2;
+}
+
+event FreezeDryerEvent{ //TODO change name;
+	constant float RANDOM_FLUCTUATION_NUMBER := 1.9;
+	constant float MINIMUM_MOISTURE := 0.0;
+}
+
 event Userstatus{
 	//The values represent the names of the queries that are passed to Prometheus
 	//from which Grafana request them and uses their data;
+	//Variables below are used in RoastDrum.mon
 	constant string DRUM := "drum";
 	constant string BEAN_COLOR := "beanColor";
 	constant string BEAN_ILLUSTRATOR := "beanIllustrator";
 	constant string ALERT := "alert";
+	
+	//Variables below are used in Extractor.mon
+	constant string CAFFEINE := "caffeine";
+	constant string VOLATILE_OILS := "volatileOils";
+	constant string ORGANIC_ACIDS := "organicAcids";
+	constant string EXTRACTOR_TEMP := "extractorTemp";
+	constant string COFFEE_TO_WATER_RATIO := "coffeeToWater";
+	
+	constant string FREEZER_TEMP := "freezerTemp";
+	
+	constant string MOISTURE := "moisture";
 }
 
 event Message{
-	constant string LOADED := "Loaded monitor Roast";
+	constant string LOADED_ROAST := "Loaded monitor RoastDrum";
+	constant string LOADED_EXTRACT := "Loaded monitor Extractor";
+	constant string LOADED_FREEZER := "Loaded monitor Freezer";
+	constant string LOADED_FREEZE_DRYER := "Loaded monitor FreezerDryer";
+}
+
+event Time{
+	constant float ADD_SECOND := 1.0;
+}
+
+event ExtractionBounds{
+	constant float MAXIMUM := 110.0;
+	constant float MINIMUM := 0.0;
 }
 
 event Delay{
 	constant float EACH_SECOND := 1.0;
 	constant float TWO_SECONDS := 2.0;
+	constant float THREE_SECONDS := 3.0;
 }
 
 event Temperature{
 	constant float PREHEAT_NUMBER := 13.1; //A random number; The random number has to be lower than 20 and higher than 10;
 	constant float DRUM_MINIMUM := 0.0;
 	constant float IMMINENT_FIRE := 258.0; // temperature at which the beans will start going on fire;
+	
+	constant float EXTRACTOR_INITIAL := 140.0; // random number between 130 and 150;
+	//Has to differ from the starting drum temp in RoastDrum because it looks better on Grafana;
+	constant float EXTRACTOR_PREHEAT := 12.1;  //A random number; The random number has to be lower than 20 and higher than 10;
+	
+	constant float FREEZER_MAX := -60.0;
+	constant float FREEZER_MIN := -20.0;
 }
 
 event ColorScheme{

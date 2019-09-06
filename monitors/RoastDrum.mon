@@ -11,7 +11,7 @@ monitor RoastDrum {
 	boolean highTemperatureReached := false;
 
 	action onload() {
-		log Message.LOADED at INFO;
+		log Message.LOADED_ROAST at INFO;
 		initialize();
 	}
 
@@ -24,8 +24,7 @@ monitor RoastDrum {
 	@return ...
 	*/
 	action preheatDrum() returns float{
-		float startTemp := (Temperature.PREHEAT_NUMBER).rand() + BeanTemp.PALE; 
-		return startTemp;
+		return (Temperature.PREHEAT_NUMBER).rand() + BeanTemp.PALE;
 	}
 	
 	/** 
@@ -41,11 +40,8 @@ monitor RoastDrum {
 			currentDrumTemp := (currentDrumTemp + randomTemp);
 			Component.setUserStatus(Userstatus.DRUM, currentDrumTemp.toString());			
 		}
-	}
+	}	
 	
-	/** 
-	@param listen ...
-	*/
 	action terminateHeatIfTooLow(listener listen){
 		if currentDrumTemp <= Temperature.DRUM_MINIMUM {
 			listen.quit();
@@ -76,17 +72,9 @@ monitor RoastDrum {
 			Component.setUserStatus(Userstatus.BEAN_COLOR, currentBeanVolt.toString());
 			Component.setUserStatus(Userstatus.BEAN_ILLUSTRATOR, beanColorIllustrator.toString());
 			
-			terminateVoltIfTooLow(listen);
-		}
-	}
-	
-	
-	/** 
-	@param listen ...
-	*/
-	action terminateVoltIfTooLow(listener listen){
-		if currentBeanVolt <= BeanColorVolt.MINIMUM {
-			listen.quit();
+			if currentBeanVolt <= BeanColorVolt.MINIMUM {
+				listen.quit();
+			}
 		}
 	}
 	

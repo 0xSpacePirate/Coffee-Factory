@@ -1,9 +1,30 @@
+using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
+
 monitor FreezeDryer {
+	
+	float currentMoisture := 100.0;
+	
 	action onload() {
-		log "Loaded monitor FreezeDryer" at INFO;
+		initialize();
+	}
+
+	action initialize(){
+		log Message.LOADED_FREEZE_DRYER at INFO;
+		freezeDry();
+	}
 		
-		
+	action freezeDry(){
+		listener listen := on all wait (Delay.EACH_SECOND){
+			float random := -(FreezeDryerEvent.RANDOM_FLUCTUATION_NUMBER).rand();
+			currentMoisture := currentMoisture + random;
+			if currentMoisture = FreezeDryerEvent.MINIMUM_MOISTURE{
+				listen.quit();
+			}
+			Component.setUserStatus(Userstatus.MOISTURE, currentMoisture.toString());
+		}
 	}
 }
+
+

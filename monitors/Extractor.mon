@@ -1,9 +1,93 @@
+using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
 monitor Extractor {
+	
+	float currentCaffeine := 1.0;
+	float currentVolatileOils := 3.0;
+	float currentOrganicAcids := 8.0;
+	float currentTemp := preheatExtractor();
+	float currentCoffeeToWaterRatio := 0.0;
+	
+	boolean highExtractionTemp := false;
+	
+	float caffeineTimeCounter := 0.0;
+	float oilsTimeCounter := 0.0;
+	float acidsTimeCounter := 0.0;
+	
+	//Side value => Amount of compound (Unit) - A
+	
 	action onload() {
-		log "Loaded monitor Extract" at INFO;
-		
-		
+		log Message.LOADED_EXTRACT at INFO;
+		initialize();
 	}
+	
+	action initialize(){
+		implementExtractorTemp();
+		extractAll();
+	}
+	
+	action extractAll(){
+		extractCaffeine();
+		extractVolatileOils();
+		extractOrganicAcids();
+	}
+	
+	action extractCaffeine(){
+		listener listen := on all wait (Delay.EACH_SECOND){
+			currentCaffeine := formula(caffeineTimeCounter, 0.0 , 0.0);			
+			Component.setUserStatus(Userstatus.CAFFEINE, currentCaffeine.toString());
+			caffeineTimeCounter := caffeineTimeCounter + Time.ADD_SECOND;
+		}
+	}
+	
+	action extractVolatileOils(){
+		listener listen := on all wait (Delay.EACH_SECOND){					
+			currentVolatileOils := formula(oilsTimeCounter, -1.0, -0.1);			
+			Component.setUserStatus(Userstatus.VOLATILE_OILS, currentVolatileOils.toString());
+			oilsTimeCounter := oilsTimeCounter + Time.ADD_SECOND;
+		}
+	}
+	
+	action extractOrganicAcids(){
+		listener listen := on all wait (Delay.EACH_SECOND){
+			currentOrganicAcids := formula(acidsTimeCounter, -1.5, -0.15);
+			Component.setUserStatus(Userstatus.ORGANIC_ACIDS, currentOrganicAcids.toString());
+			acidsTimeCounter := acidsTimeCounter + Time.ADD_SECOND;
+		}
+	}
+	
+	action implementExtractorTemp(){
+		listener listen := on all wait (Delay.TWO_SECONDS){
+			if checkTempIfTooHigh() {
+
+			}
+			currentTemp := currentTemp + 2.0;// TODO CHANGE 2.0 = RANDOM NUMBER. Used just to increment the temperature.
+			Component.setUserStatus(Userstatus.EXTRACTOR_TEMP, currentTemp.toString());
+		}
+	}
+	
+	action formula(float time, float height, float length) returns float{
+		float y := 7.7 + height; // increase value for higher function and decrease for lower; 7.7 is a random default value;
+		float x := 0.188 + length; // increase to shrink function, decrease to expand function; 0.188 is a random default value;
+		//Max Planc's formula for Black-body radition below:
+		return (y * (x * time).pow(3.0)) / (((1.0).exp()).pow(x * time) - 1.0);
+	}
+	
+	action updateCoffeeToWaterRatio(){	
+		Component.setUserStatus(Userstatus.COFFEE_TO_WATER_RATIO, currentCoffeeToWaterRatio.toString());
+		//....
+	}
+	
+	action preheatExtractor() returns float{
+		return (Temperature.EXTRACTOR_PREHEAT).rand() + Temperature.EXTRACTOR_INITIAL;
+	}
+	
+	action checkTempIfTooHigh() returns boolean{
+		if currentTemp >= Temperature.IMMINENT_FIRE {
+			highExtractionTemp := true;
+		}
+		return highExtractionTemp;
+	}
+	
 }
