@@ -38,15 +38,15 @@ event BeanTemp{
 }
 
 event FreezerTemp{
-	constant float RANDOM_FLUCTUATION_NUMBER := 2.2;
+	constant float RANDOM_FLUCTUATION_NUMBER := 1.5;
 }
 
-event FreezeDryerEvent{ //TODO change name;
+event FreezerDryer{ //TODO change name;
 	constant float RANDOM_FLUCTUATION_NUMBER := 1.9;
 	constant float MINIMUM_MOISTURE := 0.0;
 }
 
-event Userstatus{
+event UserStatus{
 	//The values represent the names of the queries that are passed to Prometheus
 	//from which Grafana request them and uses their data;
 	//Variables below are used in RoastDrum.mon
@@ -67,6 +67,29 @@ event Userstatus{
 	constant string MOISTURE := "moisture";
 }
 
+event Caffeine{
+	// default values used to increase/decrease the height/length of the caffeine graph;
+	constant float GRAPH_HEIGHT := 7.7;
+	constant float GRAPH_LENGTH := 0.188;
+}
+
+event VolatileOils{
+	// default values used to increase/decrease the height/length of the volatile oils graph;
+	constant float GRAPH_HEIGHT := 5.19;
+	constant float GRAPH_LENGTH := 0.0415;
+}
+
+event OrganicAcids{
+	// default values used to increase/decrease the height/length of the organic graph;
+	constant float GRAPH_HEIGHT := 3.11;
+	constant float GRAPH_LENGTH := 0.0197;
+}
+
+event Math{
+	constant float CUBED := 3.0;
+	constant float PLANCK_FORMULA_SUBTRACTOR := -1.0; // bl
+}
+
 event Message{
 	constant string LOADED_ROAST := "Loaded monitor RoastDrum";
 	constant string LOADED_EXTRACT := "Loaded monitor Extractor";
@@ -78,13 +101,13 @@ event Time{
 	constant float ADD_SECOND := 1.0;
 }
 
-event ExtractionBounds{
+event ExtractionBounds{ // bounds within the graph
 	constant float MAXIMUM := 110.0;
 	constant float MINIMUM := 0.0;
 }
 
 event Delay{
-	constant float EACH_SECOND := 1.0;
+	constant float ONE_SECOND := 1.0;
 	constant float TWO_SECONDS := 2.0;
 	constant float THREE_SECONDS := 3.0;
 }

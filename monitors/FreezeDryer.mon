@@ -16,13 +16,13 @@ monitor FreezeDryer {
 	}
 		
 	action freezeDry(){
-		listener listen := on all wait (Delay.EACH_SECOND){
-			float random := -(FreezeDryerEvent.RANDOM_FLUCTUATION_NUMBER).rand();
+		listener listen := on all wait (Delay.ONE_SECOND){
+			float random := -(FreezerDryer.RANDOM_FLUCTUATION_NUMBER).rand();
 			currentMoisture := currentMoisture + random;
-			if currentMoisture = FreezeDryerEvent.MINIMUM_MOISTURE{
+			if currentMoisture = FreezerDryer.MINIMUM_MOISTURE{
 				listen.quit();
 			}
-			Component.setUserStatus(Userstatus.MOISTURE, currentMoisture.toString());
+			Component.setUserStatus(UserStatus.MOISTURE, currentMoisture.toString());
 		}
 	}
 }

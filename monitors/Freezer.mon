@@ -17,7 +17,7 @@ monitor Freezer {
 		listener listen := on all wait (Delay.THREE_SECONDS){
 			float randomTemp := getRandomTemp();	
 			currentFreezerTemp := (currentFreezerTemp + randomTemp);
-			Component.setUserStatus(Userstatus.FREEZER_TEMP, currentFreezerTemp.toString());
+			Component.setUserStatus(UserStatus.FREEZER_TEMP, currentFreezerTemp.toString());
 		}
 	}
 	
@@ -32,4 +32,5 @@ monitor Freezer {
 		}
 		return randomTemp;
 	}
+	
 }
