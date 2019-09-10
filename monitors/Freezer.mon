@@ -2,9 +2,13 @@ using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
 
+event FreezerTemperature{
+	float currentFreezerTemp;
+}
+
 monitor Freezer {
 	
-	float currentFreezerTemp := -50.0; // default freezer temperature;
+	float currentFreezerTemp := -50.0; // default freezer temperature;                       TODO: add value as a constant;
 	boolean flag := false; //When using the random variable we either decrease or
 	//increase the current freezer temperature, using this variable we set the turns;
 
@@ -15,22 +19,22 @@ monitor Freezer {
 	
 	action freeze(){
 		listener listen := on all wait (Delay.THREE_SECONDS){
-			float randomTemp := getRandomTemp();	
-			currentFreezerTemp := (currentFreezerTemp + randomTemp);
+
 			Component.setUserStatus(UserStatus.FREEZER_TEMP, currentFreezerTemp.toString());
 		}
 	}
 	
-	action getRandomTemp() returns float{
-		float randomTemp := (FreezerTemp.RANDOM_FLUCTUATION_NUMBER).rand();
-		// below = take turns adding -> subtracting random values; 
-		if flag {
-			randomTemp := -randomTemp;
-			flag := false;
-		}else{
-			flag := true;
+	action updateVariables(){
+		monitor.subscribe(Channel.FREEZE);
+		updateFreezerTemp();
+	}
+	
+	action updateFreezerTemp(){
+		on all FreezerTemperature() as ft{
+			currentFreezerTemp := ft.currentFreezerTemp;
+			log "Freezer temp: " + currentFreezerTemp.toString() at INFO;
+
 		}
-		return randomTemp;
 	}
 	
 }

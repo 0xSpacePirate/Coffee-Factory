@@ -37,6 +37,13 @@ event BeanTemp{
 	
 }
 
+event Channel{
+	constant string ROAST := "roastChannel";
+	constant string EXTRACTOR := "extractorChannel";
+	constant string FREEZE := "freezeChannel";
+	constant string FREEZE_DRYER := "freezeDryerChannel";
+}
+
 event FreezerTemp{
 	constant float RANDOM_FLUCTUATION_NUMBER := 1.5;
 }
@@ -95,6 +102,11 @@ event Message{
 	constant string LOADED_EXTRACT := "Loaded monitor Extractor";
 	constant string LOADED_FREEZER := "Loaded monitor Freezer";
 	constant string LOADED_FREEZE_DRYER := "Loaded monitor FreezerDryer";
+	
+	constant string LOADED_ROAST_SIMULATOR := "Loaded monitor RoastSimulator";
+	constant string LOADED_EXTRACT_SIMULATOR := "Loaded monitor ExtractorSimulator";
+	constant string LOADED_FREEZER_SIMULATOR := "Loaded monitor FreezerSimulator";
+	constant string LOADED_FREEZE_DRYER_SIMULATOR := "Loaded monitor FreezerDryerSimulator";
 }
 
 event Time{

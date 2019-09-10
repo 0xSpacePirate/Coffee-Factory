@@ -2,6 +2,10 @@ using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
 
+event FreezerDryerEvent{
+	float currentMoisture;
+}
+
 monitor FreezeDryer {
 	
 	float currentMoisture := 100.0;
@@ -12,6 +16,7 @@ monitor FreezeDryer {
 
 	action initialize(){
 		log Message.LOADED_FREEZE_DRYER at INFO;
+		updateVariables();
 		freezeDry();
 	}
 		
@@ -23,6 +28,19 @@ monitor FreezeDryer {
 				listen.quit();
 			}
 			Component.setUserStatus(UserStatus.MOISTURE, currentMoisture.toString());
+		}
+	}
+	
+	action updateVariables(){
+		monitor.subscribe(Channel.FREEZE_DRYER);
+		updateMoisture();
+	}
+	
+	action updateMoisture(){
+		on all FreezerDryerEvent() as fde{
+			currentMoisture := fde.currentMoisture;
+			log "FreezeDryer moisture: " + currentMoisture.toString() at INFO;
+
 		}
 	}
 }

@@ -2,6 +2,22 @@ using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
 
+event CaffeineEvent{
+	float currentCaffeine;
+}
+
+event VolatileOilsEvent{
+	float currentVolatileOils;
+}
+
+event OrganicAcidsEvent{
+	float currentOrganicAcids;
+}
+
+event ExtractorTemperature{
+	float currentTemperature;
+}
+
 monitor Extractor {
 	
 	float currentCaffeine := 1.0;
@@ -25,8 +41,36 @@ monitor Extractor {
 	}
 
 	action initialize(){
+		updateVariables();
 		implementExtractorTemp();
 		extractAll();
+	}
+	
+	action updateVariables(){
+		monitor.subscribe(Channel.EXTRACTOR);
+		updateCaffeine();
+		updateVolatileOils();
+		updateOrganicAcids();
+	}
+	
+	action updateCaffeine(){
+		on all CaffeineEvent() as ce{
+			currentCaffeine := ce.currentCaffeine;
+
+		}
+	}
+	
+	action updateVolatileOils(){
+		on all VolatileOilsEvent() as voe{
+			currentVolatileOils := voe.currentVolatileOils;
+
+		}
+	}
+	
+	action updateOrganicAcids(){
+		on all OrganicAcidsEvent() as oae{
+			currentOrganicAcids := oae.currentOrganicAcids;
+		}
 	}
 
 	action extractAll(){
@@ -40,10 +84,10 @@ monitor Extractor {
 	*/
 	action extractCaffeine(){
 		listener listen := on all wait (Delay.ONE_SECOND){
-			currentCaffeine := blackBodyFormula(caffeineTimeCounter, Caffeine.GRAPH_HEIGHT, Caffeine.GRAPH_LENGTH);  
+			
+			//if statements here .....
+			
 			Component.setUserStatus(UserStatus.CAFFEINE, currentCaffeine.toString());
-			//send CaffeineEvent(...,...) to 
-			caffeineTimeCounter := caffeineTimeCounter + Time.ADD_SECOND;
 		}
 	}
 
@@ -52,9 +96,10 @@ monitor Extractor {
 	*/
 	action extractVolatileOils(){
 		listener listen := on all wait (Delay.ONE_SECOND){		
-			currentVolatileOils := blackBodyFormula(oilsTimeCounter, VolatileOils.GRAPH_HEIGHT, VolatileOils.GRAPH_LENGTH);	
+
+//			if statements here .....
+			
 			Component.setUserStatus(UserStatus.VOLATILE_OILS, currentVolatileOils.toString());
-			oilsTimeCounter := oilsTimeCounter + Time.ADD_SECOND;
 		}
 	}
 	
@@ -63,9 +108,10 @@ monitor Extractor {
 	*/	
 	action extractOrganicAcids(){
 		listener listen := on all wait (Delay.ONE_SECOND){
-			currentOrganicAcids := blackBodyFormula(acidsTimeCounter, OrganicAcids.GRAPH_HEIGHT, OrganicAcids.GRAPH_LENGTH); 
+
+//			if statements here .....
+			
 			Component.setUserStatus(UserStatus.ORGANIC_ACIDS, currentOrganicAcids.toString());
-			acidsTimeCounter := acidsTimeCounter + Time.ADD_SECOND;
 		}
 	}
 	
@@ -75,11 +121,10 @@ monitor Extractor {
 	*/
 	action implementExtractorTemp(){
 		listener listen := on all wait (Delay.TWO_SECONDS){
-			float randomTempIncrementor := (2.0).rand();
+			//float randomTempIncrementor := (2.0).rand(); // TODO FIX MAGIC NUMBER;
 			if checkTempIfTooHigh() {
-				randomTempIncrementor := -randomTempIncrementor;
+				//randomTempIncrementor := -randomTempIncrementor;
 			}
-			currentTemp := currentTemp + randomTempIncrementor;
 			Component.setUserStatus(UserStatus.EXTRACTOR_TEMP, currentTemp.toString());
 		}
 	}
@@ -129,3 +174,5 @@ monitor Extractor {
 	}
 	
 }
+
+

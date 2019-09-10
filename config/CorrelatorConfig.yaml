@@ -12,6 +12,18 @@
 #    level: DEBUG
 #  com.myCompany.Internal: { level: ERROR }
 
+engineConnect:
+    - sourceHost: localhost
+      sourcePort: 15904
+
+      channels:
+        - roastChannel
+        - extractorChannel
+        - freezeChannel
+        - freezeDryerChannel
+
+      mode: parallel
+      disconnectIfSlow: true
 
 #See the information on setting log files and log levels in a YAML configuration file in the documentation for more
 # information about the supported options.
