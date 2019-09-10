@@ -42,6 +42,20 @@ event Channel{
 	constant string EXTRACTOR := "extractorChannel";
 	constant string FREEZE := "freezeChannel";
 	constant string FREEZE_DRYER := "freezeDryerChannel";
+	
+	constant string ROAST_SIMULATOR := "roastSimulatorChannel";
+	constant string EXTRACTOR_SIMULATOR := "extractorSimulatorChannel";
+    constant string FREEZER_SIMULATOR := "freezeSimulatorChannel";
+    constant string FREEZE_DRYER_SIMULATOR := "freezeDryerSimulatorChannel";
+}
+
+event AlertTypesd{
+
+	constant integer HIGH_ROAST_DRUM_TEMP := 1;
+	constant integer HIGH_EXTRACTOR_DRUM_TEMP := 2;
+	//constant integer HIGH_ROAST_DRUM_TEMP := 1;
+	//constant integer HIGH_ROAST_DRUM_TEMP := 1;
+	//constant integer HIGH_ROAST_DRUM_TEMP := 1;
 }
 
 event FreezerTemp{
@@ -72,6 +86,8 @@ event UserStatus{
 	constant string FREEZER_TEMP := "freezerTemp";
 	
 	constant string MOISTURE := "moisture";
+	constant string VACUUM := "vacuum";
+	constant string FREEZER_DRYER_TEMP := "freezerDryerTemp";
 }
 
 event Caffeine{

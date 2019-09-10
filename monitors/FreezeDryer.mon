@@ -2,16 +2,28 @@ using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
 
-event FreezerDryerEvent{
+event FreezerDryerMoisture{
 	float currentMoisture;
+}
+
+event FreezerDryerTemp{
+	float currentTemp;
+}
+
+event FreezerDryerVacuum{
+	float currentVacuum;
 }
 
 monitor FreezeDryer {
 	
-	float currentMoisture := 100.0;
+	float currentMoisture := 0.0;
+	float currentVacuum := 0.0;
+	float currentTemp := 0.0;
 	
 	action onload() {
+		sendBackAsd();
 		initialize();
+
 	}
 
 	action initialize(){
@@ -21,26 +33,62 @@ monitor FreezeDryer {
 	}
 		
 	action freezeDry(){
-		listener listen := on all wait (Delay.ONE_SECOND){
-			float random := -(FreezerDryer.RANDOM_FLUCTUATION_NUMBER).rand();
-			currentMoisture := currentMoisture + random;
-			if currentMoisture = FreezerDryer.MINIMUM_MOISTURE{
-				listen.quit();
-			}
-			Component.setUserStatus(UserStatus.MOISTURE, currentMoisture.toString());
+		listener listen := on all wait (1.0){
+			implementMoisture();
+			implementPressure();
+			implementTemperature();
 		}
+	}
+	
+	action implementMoisture(){
+
+		// if ..... 
+		
+		Component.setUserStatus(UserStatus.MOISTURE, currentMoisture.toString());
+	}
+	
+	
+	action implementPressure(){
+
+		// if ..... 
+		
+		Component.setUserStatus(UserStatus.VACUUM, currentVacuum.toString());
+	}
+	
+	action sendBackAsd(){
+		send Alert("1") to Channel.FREEZE_DRYER_SIMULATOR;
+	}
+	
+	action implementTemperature(){
+
+		// if ..... 
+		
+		Component.setUserStatus(UserStatus.FREEZER_DRYER_TEMP, currentTemp.toString());
 	}
 	
 	action updateVariables(){
 		monitor.subscribe(Channel.FREEZE_DRYER);
 		updateMoisture();
+		updateTemp();
+		updateVacuum();
 	}
 	
 	action updateMoisture(){
-		on all FreezerDryerEvent() as fde{
+		on all FreezerDryerMoisture() as fde{
 			currentMoisture := fde.currentMoisture;
-			log "FreezeDryer moisture: " + currentMoisture.toString() at INFO;
-
+		}
+	}
+	
+	action updateTemp(){
+		on all FreezerDryerTemp() as fdm{
+			currentTemp := fdm.currentTemp;
+		}
+	}
+	
+	action updateVacuum(){
+		on all FreezerDryerVacuum() as fdv{
+			log "VACUUM ======== " + currentVacuum.toString() at INFO;
+			currentVacuum := fdv.currentVacuum;
 		}
 	}
 }

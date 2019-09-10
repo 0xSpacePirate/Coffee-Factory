@@ -18,7 +18,7 @@ monitor Freezer {
 	}
 	
 	action freeze(){
-		listener listen := on all wait (Delay.THREE_SECONDS){
+		listener listen := on all wait (3.0){
 
 			Component.setUserStatus(UserStatus.FREEZER_TEMP, currentFreezerTemp.toString());
 		}
@@ -32,8 +32,6 @@ monitor Freezer {
 	action updateFreezerTemp(){
 		on all FreezerTemperature() as ft{
 			currentFreezerTemp := ft.currentFreezerTemp;
-			log "Freezer temp: " + currentFreezerTemp.toString() at INFO;
-
 		}
 	}
 	
