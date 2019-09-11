@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="com.apama.text.launcher.monitorscriptApplication">
-<stringAttribute key="com.apama.launch.dirty" value="1568217824335"/>
-<stringAttribute key="com.apama.text.CONFIG_LOCATION" value="\Coffee Factory\config\launch\Coffee Factory.deploy"/>
+<stringAttribute key="com.apama.text.CONFIG_LOCATION" value="\Coffee Factory\config\launch\Coffee Factory (1).deploy"/>
 <intAttribute key="com.apama.text.CONFIG_VERSION" value="3"/>
 <stringAttribute key="com.apama.text.PROJECT_ATTR" value="Coffee Factory"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">

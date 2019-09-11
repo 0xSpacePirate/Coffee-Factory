@@ -9,7 +9,7 @@ event DrumTemperature{
 }
 
 event Alert{
-	string asd;
+	integer anAlert;
 }
 
 
@@ -20,9 +20,6 @@ monitor RoastDrum {
 
 	float currentDrumTemp; // default temp in drum before roasting is just below 200, e.g. 190;
 	float currentBeanVolt := BeanColorVolt.MAXIMUM; 
-	
-	boolean highRoastTemp := false; // used as a gate to decrease the temp;
-	boolean lowRoastTemp := true; // used as a gate to increase the temp;
 	
 	action onload() {
 		log Message.LOADED_ROAST at INFO;
@@ -41,32 +38,19 @@ monitor RoastDrum {
 	action heatDrum(){		
 		listener listen := on all wait (2.0){
 			float randomTemp := (BeanRandom.TEMP_INCREMENTER).rand();	
-			if checkTempIfTooHigh() {
-				//randomTemp := -randomTemp;
-				terminateHeatIfTooLow(listen);
-			}			
-			
+			if currentDrumTemp >= Temperature.IMMINENT_FIRE{
+				resetDueToHighHeat();
+			}				
 			Component.setUserStatus(UserStatus.DRUM, currentDrumTemp.toString());			
 		}
 	}	
-	
-	action terminateHeatIfTooLow(listener listen){
-		if currentDrumTemp <= Temperature.DRUM_MINIMUM {
-			//lowRoastTemp := true;
-			//highRoastTemp := false;
-			listen.quit();
-		}
-	}
+
 	
 	/** 
 	@return ...
 	*/
-	action checkTempIfTooHigh() returns boolean{
-		if currentDrumTemp >= Temperature.IMMINENT_FIRE {
-			highRoastTemp := true;
-			lowRoastTemp := false;
-		}
-		return highRoastTemp;
+	action resetDueToHighHeat(){
+		send Alert(AlertType.HIGH_ROAST_DRUM_HEAT) to Channel.ROAST_SIMULATOR;
 	}
 		
 	/** 
@@ -77,13 +61,13 @@ monitor RoastDrum {
 			float randomVoltIncrease := (BeanTracker.COLOR_CHANGER).rand(); // the beans spin while in the drum, therefore their temperature might differ slightly. Plus, making the graph more realistic;
 			float gate := (BeanRandom.GATE_BOUND).rand();
 			integer beanColorIllustrator := getBeanIllustrator(currentBeanVolt);
-			
+			if currentBeanVolt <= BeanColorVolt.MINIMUM {
+				//listen.quit();
+			}
 			Component.setUserStatus(UserStatus.BEAN_COLOR, currentBeanVolt.toString());
 			Component.setUserStatus(UserStatus.BEAN_ILLUSTRATOR, beanColorIllustrator.toString());
 			
-			if currentBeanVolt <= BeanColorVolt.MINIMUM {
-				listen.quit();
-			}
+			
 		}
 	}
 	

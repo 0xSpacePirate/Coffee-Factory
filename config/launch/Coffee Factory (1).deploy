@@ -2,169 +2,167 @@
 <intAttribute key="com.apama.text.CONFIG_VERSION" value="3"/>
 <listAttribute key="com.apama.text.COMPONENTS">
 <listEntry>
-
-
-<component clear="false" correlatorLog="false" correlatorLogLocation="logs/${LAUNCH_CONFIG_NAME}_${CORRELATOR_NAME}.output.log" dataLocationDir="${project_loc:Coffee Factory}/database/defaultCorrelator" distMemoryStoreEnabled="false" enabled="true" extraArguments="" hostname="localhost" inputLog="true" inputLogLocation="logs/defaultCorrelator_${START_TIME}_${ID}.input.log" isAutomaticOrdering="true" isPeristanceEnabled="false" javaEnabled="true" jmsResiliencyEnabled="false" logLevel="INFO" maxMBLocalHeap="512" maxMBLocalHeapEnabled="false" maxMBLocalOffHeap="16384" maxMBLocalOffHeapEnabled="false" name="defaultCorrelator" persistenceStartupOption="CLEAR_REINJECT" port="15903" reuse="false" type="CORRELATOR" workingDir="/Coffee Factory" xConfigEnabled="true" xConfigLocation="${project_loc:Coffee Factory}/config/CorrelatorConfig.yaml">
+<component clear="true" correlatorLog="false" correlatorLogLocation="logs/${LAUNCH_CONFIG_NAME}_${CORRELATOR_NAME}.output.log" dataLocationDir="${project_loc:Coffee Factory}/database/defaultCorrelator" distMemoryStoreEnabled="false" enabled="true" extraArguments="" hostname="localhost" inputLog="true" inputLogLocation="logs/defaultCorrelator_${START_TIME}_${ID}.input.log" isAutomaticOrdering="true" isPeristanceEnabled="false" javaEnabled="true" jmsResiliencyEnabled="false" logLevel="INFO" maxMBLocalHeap="512" maxMBLocalHeapEnabled="false" maxMBLocalOffHeap="16384" maxMBLocalOffHeapEnabled="false" name="defaultCorrelator" persistenceStartupOption="CLEAR_REINJECT" port="15903" reuse="false" type="CORRELATOR" workingDir="/Coffee Factory" xConfigEnabled="true" xConfigLocation="${project_loc:Coffee Factory}/config/CorrelatorConfig.yaml">
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/ConnectivityPluginsControl.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="AutomaticOnApplicationInitialized.bnd"/>
-<attribute name="bundle-display-name" value="Connectivity Plug-ins application support"/>
 <attribute name="bundle-name" value="Connectivity Plug-ins application support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="AutomaticOnApplicationInitialized.bnd"/>
+<attribute name="bundle-display-name" value="Connectivity Plug-ins application support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/ConnectivityPlugins.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="AutomaticOnApplicationInitialized.bnd"/>
-<attribute name="bundle-display-name" value="Connectivity Plug-ins application support"/>
 <attribute name="bundle-name" value="Connectivity Plug-ins application support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="AutomaticOnApplicationInitialized.bnd"/>
+<attribute name="bundle-display-name" value="Connectivity Plug-ins application support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/AutomaticOnApplicationInitialized.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="AutomaticOnApplicationInitialized.bnd"/>
-<attribute name="bundle-display-name" value="Automatic onApplicationInitialized"/>
 <attribute name="bundle-name" value="Automatic onApplicationInitialized"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="AutomaticOnApplicationInitialized.bnd"/>
+<attribute name="bundle-display-name" value="Automatic onApplicationInitialized"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/CorrelatorJMSEvents.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Correlator-Integrated JMS Application Support"/>
 <attribute name="bundle-name" value="Correlator-Integrated JMS Application Support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Correlator-Integrated JMS Application Support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/StatusSupport.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Status Support"/>
 <attribute name="bundle-name" value="Status Support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Status Support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/CorrelatorJMSStatusManager.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Correlator-Integrated JMS Application Support"/>
 <attribute name="bundle-name" value="Correlator-Integrated JMS Application Support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Correlator-Integrated JMS Application Support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/DashboardSupport.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="DashboardSupport.bnd"/>
-<attribute name="bundle-display-name" value="Dashboard Support"/>
 <attribute name="bundle-name" value="Dashboard Support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="DashboardSupport.bnd"/>
+<attribute name="bundle-display-name" value="Dashboard Support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/data_storage/MemoryStore.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="The MemoryStore"/>
 <attribute name="bundle-name" value="The MemoryStore"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="The MemoryStore"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/ScenarioService.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="ScenarioService.bnd"/>
-<attribute name="bundle-display-name" value="Scenario Service"/>
 <attribute name="bundle-name" value="Scenario Service"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="ScenarioService.bnd"/>
+<attribute name="bundle-display-name" value="Scenario Service"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/data_storage/MemoryStoreScenarioImpl.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="The MemoryStore"/>
 <attribute name="bundle-name" value="The MemoryStore"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="The MemoryStore"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/DataViewService_Interface.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="DataViewService.bnd"/>
-<attribute name="bundle-display-name" value="DataView Service"/>
 <attribute name="bundle-name" value="DataView Service"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="DataViewService.bnd"/>
+<attribute name="bundle-display-name" value="DataView Service"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/DataViewService_Impl_Dict.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="DataViewService.bnd"/>
-<attribute name="bundle-display-name" value="DataView Service"/>
 <attribute name="bundle-name" value="DataView Service"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="DataViewService.bnd"/>
+<attribute name="bundle-display-name" value="DataView Service"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/EventScheduler.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Query support"/>
 <attribute name="bundle-name" value="Query support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Query support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/ManagementImpl.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Correlator Management"/>
 <attribute name="bundle-name" value="Correlator Management"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Correlator Management"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/Management.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Correlator Management"/>
 <attribute name="bundle-name" value="Correlator Management"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Correlator Management"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/TimeFormatEvents.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Time Format"/>
 <attribute name="bundle-name" value="Time Format"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Time Format"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/query_support/QueryServices.cdp" type="PROJECT_BUNDLE_CDP_FILE">
 <attributes>
-<attribute name="bundle-file" value="QuerySupport.bnd"/>
-<attribute name="bundle-display-name" value="Query support"/>
 <attribute name="bundle-name" value="Query support"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="QuerySupport.bnd"/>
+<attribute name="bundle-display-name" value="Query support"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/scenario_support/ScenarioDeleterSupport.mon" type="PROJECT_BUNDLE_MON_FILE">
 <attributes>
-<attribute name="bundle-file" value="ScenarioService.bnd"/>
-<attribute name="bundle-display-name" value="Scenario Service"/>
 <attribute name="bundle-name" value="Scenario Service"/>
 <attribute name="origin-path" value=""/>
 <attribute name="origin" value="PRODUCT_CATALOG"/>
+<attribute name="bundle-file" value="ScenarioService.bnd"/>
+<attribute name="bundle-display-name" value="Scenario Service"/>
 </attributes>
 </runtimeDependencyEntry>
 <runtimeDependencyEntry enabled="true" path="/Coffee Factory/eventdefinitions/CoffeeFactoryConstants.mon" type="PROJECT_MON_FILE"/>
@@ -178,10 +176,9 @@
 </component>
 </listEntry>
 </listAttribute>
-<stringAttribute key="com.apama.text.DASHBOARD_PATH_ATTR" value="dashboards/CoffeeFactory.rtv"/>
-<booleanAttribute key="com.apama.text.OPEN_DASHBOARD_ATTR" value="false"/>
+<booleanAttribute key="com.apama.text.OPEN_DASHBOARD_ATTR" value="true"/>
 <booleanAttribute key="com.apama.text.OPEN_DEFAULT_DASHBOARD_ATTR" value="true"/>
+<stringAttribute key="com.apama.text.DASHBOARD_PATH_ATTR" value="dashboards/CoffeeFactory.rtv"/>
 <booleanAttribute key="com.apama.text.OPEN_ENABLE_DATAPLAYER_MODE_ATTR" value="false"/>
 <booleanAttribute key="com.apama.text.GENERATE_TIME_EVENTS_ATTR" value="true"/>
-<stringAttribute key="com.apama.text.DASHBOARD_VIEWER_ARGS" value=""/>
 </configuration>

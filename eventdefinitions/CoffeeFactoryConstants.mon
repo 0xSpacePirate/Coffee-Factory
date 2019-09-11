@@ -17,6 +17,14 @@ event AlertType{
 	constant integer FULL_CITY := 4;
 	constant integer VIENA_COFFEE := 5;
 	constant integer FULL_FRENCH := 6;
+	
+	constant integer HIGH_ROAST_DRUM_HEAT := 1;
+	constant integer HIGH_EXTRACTION_DRUM_HEAT := 2;
+	constant integer HIGH_TUBE_HEAT := 3;
+	
+	constant integer LOW_ROAST_DRUM_HEAT := 4;
+	constant integer LOW_EXTRACTION_DRUM_HEAT := 5;
+	constant integer LOW_TUBE_HEAT := 6;
 }
 
 event BeanColorVolt{

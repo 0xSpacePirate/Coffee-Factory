@@ -22,8 +22,8 @@ engineConnect:
         - freezeChannel
         - freezeDryerChannel
 
-      mode: parallel
-      disconnectIfSlow: true
+      #mode: parallel
+      #disconnectIfSlow: false
 
 #See the information on setting log files and log levels in a YAML configuration file in the documentation for more
 # information about the supported options.

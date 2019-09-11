@@ -56,7 +56,7 @@ monitor FreezeDryer {
 	}
 	
 	action sendBackAsd(){
-		send Alert("1") to Channel.FREEZE_DRYER_SIMULATOR;
+		send Alert(1) to Channel.FREEZE_DRYER_SIMULATOR;
 	}
 	
 	action implementTemperature(){
