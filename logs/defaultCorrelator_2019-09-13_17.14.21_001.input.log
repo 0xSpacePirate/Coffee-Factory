@@ -1,0 +1,37 @@
+VERS 00000001 5
+HEAD 00001306 <?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="/resources/transform.xslt"?><header><componentName>correlator</componentName><version>10.5.0.0.357639</version><build>rel/10.5.0.x@357639</build><buildPlatform>amd64-win</buildPlatform><platform>Windows 10 Enterprise</platform><cputype>GenuineIntel family 6 model 14 stepping 3 Intel(R) Core(TM) i7-6600U CPU @ 2.60GHz</cputype><cpus name="cpus">4.00</cpus><javaEnabled>true</javaEnabled><replayLogMode>inputLog</replayLogMode><args><arg>C:\dev\apama_win_full_latest\Apama\bin\correlator.exe</arg><arg>--config</arg><arg>C:\Users\y508970\workspace105\Coffee Factory\config\CorrelatorConfig.yaml</arg><arg>--port</arg><arg>15903</arg><arg>--loglevel</arg><arg>INFO</arg><arg>--name</arg><arg>Apama Designer Correlator for Coffee Factory(Coffee Factory:defaultCorrelator)</arg><arg>-j</arg><arg>--inputLog</arg><arg>logs/defaultCorrelator_${START_TIME}_${ID}.input.log</arg></args><environment><variable>ALLUSERSPROFILE=C:\ProgramData</variable><variable>APAMA_HOME=C:\dev\apama_win_full_latest\Apama</variable><variable>APAMA_WORK=C:\Users\Public\SoftwareAG\ApamaWork_10.5</variable><variable>APPDATA=C:\Users\y508970\AppData\Roaming</variable><variable>COMMONPROGRAMFILES=C:\Program Files\Common Files</variable><variable>COMMONPROGRAMFILES(X86)=C:\Program Files (x86)\Common Files</variable><variable>COMMONPROGRAMW6432=C:\Program Files\Common Files</variable><variable>COMPUTERNAME=SAG-98V9PF2</variable><variable>COMSPEC=C:\Windows\system32\cmd.exe</variable><variable>DEFLOGDIR=C:\ProgramData\McAfee\Endpoint Security\Logs</variable><variable>DRIVERDATA=C:\Windows\System32\Drivers\DriverData</variable><variable>EMPIRUMSERVER=cukuni02.eur.ad.sag</variable><variable>EMPIRUMSERVICEPARTITION=0</variable><variable>EMPSRVLONG=cukuni02.eur.ad.sag</variable><variable>HOMEDRIVE=C:</variable><variable>HOMEPATH=\Users\y508970</variable><variable>LOCALAPPDATA=C:\Users\y508970\AppData\Local</variable><variable>LOGONSERVER=\\CUKDC85</variable><variable>NUMBER_OF_PROCESSORS=4</variable><variable>ONEDRIVE=C:\Users\y508970\OneDrive - Software AG</variable><variable>ONEDRIVECOMMERCIAL=C:\Users\y508970\OneDrive - Software AG</variable><variable>OS=Windows_NT</variable><variable>PATH=C:\dev\apama_win_full_latest\Apama\..\jvm\jvm\jre\bin\server;C:\dev\apama_win_full_latest\Apama\..\jvm\jvm\jre\bin;C:\dev\apama_win_full_latest\Apama\bin;C:\dev\apama_win_full_latest\Apama\..\common\security\openssl\bin;C:\Users\Public\SoftwareAG\ApamaWork_10.5\lib;C:\dev\apama_win_full_latest\Apama\..\jvm\jvm\jre\bin;C:\dev\apama_win_full_latest\Apama\..\jvm\jvm\jre\bin\server;C:\dev\apama_win_full_latest\Apama\..\UniversalMessaging\cplus\lib\x86_64;C:\dev\apama_win_full_latest\Apama\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\PuTTY\;C:\Program Files\SlikSvn\bin;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\TortoiseGit\bin;C:\Users\y508970\AppData\Local\Microsoft\WindowsApps;C:\Users\y508970\AppData\Local\Programs\Git\cmd;C:\Users\y508970\AppData\Local\GitHubDesktop\bin</variable><variable>PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC</variable><variable>PROCESSOR_ARCHITECTURE=AMD64</variable><variable>PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 78 Stepping 3, GenuineIntel</variable><variable>PROCESSOR_LEVEL=6</variable><variable>PROCESSOR_REVISION=4e03</variable><variable>PROGRAMDATA=C:\ProgramData</variable><variable>PROGRAMFILES=C:\Program Files</variable><variable>PROGRAMFILES(X86)=C:\Program Files (x86)</variable><variable>PROGRAMW6432=C:\Program Files</variable><variable>PROMPT=$P$G</variable><variable>PSMODULEPATH=C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules;C:\Program Files\Barracuda\Network Access Client\Modules</variable><variable>PUBLIC=C:\Users\Public</variable><variable>SESSIONNAME=Console</variable><variable>SSL_CERT_FILE=C:\dev\apama_win_full_latest\Apama\..\common\security\openssl\cert.pem</variable><variable>SYSTEMDRIVE=C:</variable><variable>SYSTEMROOT=C:\Windows</variable><variable>TEMP=C:\Users\y508970\AppData\Local\Temp</variable><variable>TMP=C:\Users\y508970\AppData\Local\Temp</variable><variable>USERDNSDOMAIN=EUR.AD.SAG</variable><variable>USERDOMAIN=EUR</variable><variable>USERDOMAIN_ROAMINGPROFILE=EUR</variable><variable>USERNAME=y508970</variable><variable>USERPROFILE=C:\Users\y508970</variable><variable>WINDIR=C:\Windows</variable></environment><version>10.5.0.0.357639</version></header>
+YAML 000005a4 ###############################################################################
+# $Copyright (c) 2016 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.$
+# Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG
+###############################################################################
+
+#To set the default log file and level for an EPL package, monitor, or event, specify
+# logging details in the eplLogging section of the YAML configuration file.
+#For example:
+#eplLogging:
+#  com.myCompany.Client:
+#    file: apama/Client.log
+#    level: DEBUG
+#  com.myCompany.Internal: { level: ERROR }
+
+engineConnect:
+    - sourceHost: localhost
+      sourcePort: 15903
+
+      channels:
+        - roastChannel
+        - extractorChannel
+        - freezeChannel
+        - freezeDryerChannel
+
+      #mode: parallel
+      #disconnectIfSlow: false
+
+#See the information on setting log files and log levels in a YAML configuration file in the documentation for more
+# information about the supported options.
+#To enable use of this file when you launch this project from Designer, edit the project's run/launch configuration,
+#open the correlator, and tick the "Configuration" checkbox next to the textbox that names this .yaml file.
+ 00000049 C:\Users\y508970\workspace105\Coffee Factory\config\CorrelatorConfig.yaml
+RAND 00000009 728198390
+TIME 00000010 1568391264.143,1

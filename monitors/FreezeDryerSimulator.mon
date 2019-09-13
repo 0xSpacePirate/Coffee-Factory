@@ -1,0 +1,152 @@
+
+/** This monitor is responsible for ...  */
+
+event FreezerDryerMoisture{
+	float currentMoisture;
+}
+
+event FreezerDryerTemp{
+	float currentTemp;
+}
+
+event FreezerDryerVacuum{
+	float currentVacuum;
+}
+
+event Alert{
+	integer anAlert;
+}
+
+event BadEvent{
+	float temperatureIncrease;
+}
+
+//TODO: tube stuff -> add button click -> something wrong happens -> fix;
+
+monitor FreezeDryerSimulator {
+
+	float currentMoisture := 100.0;
+	float currentTemp := 60.0;
+	float currentVacuum := 150.0;
+		
+	listener moistureListener;
+	listener tubeTempListener;
+	listener vacuumPressureListener;
+	
+	action onload() {
+		initialize();
+	}
+
+	action initialize(){
+		log Message.LOADED_FREEZE_DRYER_SIMULATOR at INFO;
+		moistureEvaporating();
+		implementTubeTemperature();
+		implementTubeVacuum();
+		listenForAlerts();
+	}
+		
+	action moistureEvaporating(){
+		moistureListener := on all wait (2.0){
+			float random := (FreezerDryer.RANDOM_FLUCTUATION_NUMBER).rand();
+			currentMoisture := currentMoisture - random;
+			log "MOISTURE -> SIMULATOR = " + currentMoisture.toString() at INFO;
+			send FreezerDryerMoisture(currentMoisture) to Channel.FREEZE_DRYER;
+		}
+	}
+	
+	action implementTubeTemperature(){
+		tubeTempListener := on all wait (3.0){
+			float random := (1.0).rand(); // TODO: Add explaination...
+			float tempGate := (1.0).rand();			
+			currentTemp := implementFluctuation(tempGate, currentTemp, random);
+			send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
+		}
+	}
+	
+	action implementTubeVacuum(){
+		vacuumPressureListener := on all wait (2.0){
+			float random := (1.0).rand(); // TODO: Add explaination...
+			float vacuumGate := (1.0).rand();
+			currentVacuum := implementFluctuation(vacuumGate, currentVacuum, random);
+			send FreezerDryerVacuum(currentVacuum) to Channel.FREEZE_DRYER;
+		}
+	}
+	
+	action listenForAlerts(){
+		monitor.subscribe(Channel.FREEZE_DRYER_SIMULATOR);
+		checkMoisture();
+		checkTube();
+		checkForBadEvents();
+		listenToStabilizer();
+	}
+	
+	action checkMoisture(){
+		on all Alert(anAlert=AlertType.MINIMUM_MOISTURE_REACHED){
+			reset();
+		}
+	}
+	
+	action checkTube(){
+		on all Alert(anAlert=AlertType.HIGH_TUBE_HEAT){
+			reset();
+		}
+	}
+	
+	action listenToStabilizer(){
+		on all FreezerDryerTemp() as fdt{
+			currentTemp := fdt.currentTemp;
+		}
+	}
+	
+	action checkForBadEvents(){
+		on all BadEvent() as be{
+			currentTemp := currentTemp + be.temperatureIncrease;
+		}
+	}
+	
+	action asd(){
+		
+	}
+	
+	action reset(){
+		stopListeners();
+		on wait(1.0){
+			log "FreezeDryer STOPPED. NEW BEANS IN!" at INFO;
+			resetFreezerDryerVariables();
+			send FreezerDryerMoisture(currentMoisture) to Channel.FREEZE_DRYER;
+			send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
+			send FreezerDryerVacuum(currentVacuum) to Channel.FREEZE_DRYER;
+			
+		}
+		startOver();
+	}
+	
+	action startOver(){
+		moistureEvaporating();
+		implementTubeTemperature();
+		implementTubeVacuum();
+	}
+	
+	action resetFreezerDryerVariables(){
+		currentMoisture := 100.0;
+		currentTemp := 60.0;
+		currentVacuum := 150.0;
+	}
+
+	action stopListeners(){
+		moistureListener.quit();
+		tubeTempListener.quit();
+		vacuumPressureListener.quit();
+	}
+	
+
+	action implementFluctuation(float gate, float currentValue, float randomNumber) returns float{
+		if gate <= 0.5 {
+			currentValue := currentValue - randomNumber;
+		}else{
+			currentValue := currentValue + randomNumber;
+		}
+		return currentValue;
+	}
+	
+}

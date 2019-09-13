@@ -1,18 +1,5 @@
 using com.apama.correlator.Component;
 
-event ColorTrack{
-	float currentBeanVolt;
-}
-
-event DrumTemperature{
-	float currentDrumTemperature;
-}
-
-event Alert{
-	integer anAlert;
-}
-
-
 monitor RoastDrum {
 	
 	integer beanIllustrator := 1; //parses the number so the program can display the actual color of the bean in a range from 1 to 100; Where 1 is green and very black is 100;
@@ -38,39 +25,33 @@ monitor RoastDrum {
 	action heatDrum(){		
 		listener listen := on all wait (2.0){
 			float randomTemp := (BeanRandom.TEMP_INCREMENTER).rand();	
-			if currentDrumTemp >= Temperature.IMMINENT_FIRE{
-				resetDueToHighHeat();
-			}				
+			listenForProblems();			
 			Component.setUserStatus(UserStatus.DRUM, currentDrumTemp.toString());			
 		}
 	}	
 
-	
-	/** 
-	@return ...
-	*/
-	action resetDueToHighHeat(){
-		send Alert(AlertType.HIGH_ROAST_DRUM_HEAT) to Channel.ROAST_SIMULATOR;
-	}
-		
 	/** 
 		....
 	*/
 	action colorTrack(){		
 		listener listen := on all wait (1.0){
-			float randomVoltIncrease := (BeanTracker.COLOR_CHANGER).rand(); // the beans spin while in the drum, therefore their temperature might differ slightly. Plus, making the graph more realistic;
 			float gate := (BeanRandom.GATE_BOUND).rand();
 			integer beanColorIllustrator := getBeanIllustrator(currentBeanVolt);
-			if currentBeanVolt <= BeanColorVolt.MINIMUM {
-				//listen.quit();
-			}
+			listenForProblems();
 			Component.setUserStatus(UserStatus.BEAN_COLOR, currentBeanVolt.toString());
 			Component.setUserStatus(UserStatus.BEAN_ILLUSTRATOR, beanColorIllustrator.toString());
-			
-			
 		}
 	}
 	
+	action listenForProblems(){
+		if currentDrumTemp >= Temperature.IMMINENT_FIRE{
+			resetDueToHighHeat();
+		}
+		if currentBeanVolt <= BeanColorVolt.MINIMUM {
+			resetDueToLowBeanColor();
+		}			
+	}
+
 	action updateVariables(){
 		monitor.subscribe(Channel.ROAST);
 		updateTemp();
@@ -104,8 +85,13 @@ monitor RoastDrum {
 		return value.floor() / Divider.BY_HALF;
 	}
 	
-	action sendRoastAlert(){
-		//send Alert("1") to Channel.ROAST_SIMULATOR;
+	action resetDueToLowBeanColor(){ //Beans are way too dark colored - could cause an explosion
+		send Alert(AlertType.COLOR_TRACKER_TOO_LOW) to Channel.ROAST_SIMULATOR;
 	}
+	
+	action resetDueToHighHeat(){
+		send Alert(AlertType.HIGH_ROAST_DRUM_HEAT) to Channel.ROAST_SIMULATOR;
+	}
+		
 	
 }

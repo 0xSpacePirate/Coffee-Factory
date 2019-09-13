@@ -2,22 +2,6 @@ using com.apama.correlator.Component;
 
 /** This monitor is responsible for ...  */
 
-event CaffeineEvent{
-	float currentCaffeine;
-}
-
-event VolatileOilsEvent{
-	float currentVolatileOils;
-}
-
-event OrganicAcidsEvent{
-	float currentOrganicAcids;
-}
-
-event ExtractorTemperature{
-	float currentTemperature;
-}
-
 monitor Extractor {
 	
 	float currentCaffeine := 1.0;
@@ -32,9 +16,7 @@ monitor Extractor {
 	float caffeineTimeCounter := 0.0;
 	float oilsTimeCounter := 0.0;
 	float acidsTimeCounter := 0.0;
-	
-	//Side value => Amount of compound (Unit) - A
-	
+		
 	action onload() {
 		log Message.LOADED_EXTRACT at INFO;
 		initialize();
@@ -54,88 +36,36 @@ monitor Extractor {
 		updateExtractorTemperature();
 	}
 	
-	action updateCaffeine(){
-		on all CaffeineEvent() as ce{
-			currentCaffeine := ce.currentCaffeine;
-
-		}
-	}
-	
-	action updateVolatileOils(){
-		on all VolatileOilsEvent() as voe{
-			currentVolatileOils := voe.currentVolatileOils;
-
-		}
-	}
-	
-	action updateOrganicAcids(){
-		on all OrganicAcidsEvent() as oae{
-			currentOrganicAcids := oae.currentOrganicAcids;
-		}
-	}
-	
-	action updateExtractorTemperature(){
-		on all ExtractorTemperature() as et{
-			currentTemp := et.currentTemperature;
-		}
-	}
-
 	action extractAll(){
-		extractCaffeine();
-		extractVolatileOils();
-		extractOrganicAcids();
-	}
-
-	/** 
-	...
-	*/
-	action extractCaffeine(){
 		listener listen := on all wait (1.0){
-			
-			//if statements here .....
-			
-			Component.setUserStatus(UserStatus.CAFFEINE, currentCaffeine.toString());
+			extractCaffeine();
+			extractVolatileOils();
+			extractOrganicAcids();
 		}
 	}
 
-	/** 
-	...
-	*/
-	action extractVolatileOils(){
-		listener listen := on all wait (1.0){		
+	action extractCaffeine(){
+		Component.setUserStatus(UserStatus.CAFFEINE, currentCaffeine.toString());
+	}
 
-//			if statements here .....
-			
-			Component.setUserStatus(UserStatus.VOLATILE_OILS, currentVolatileOils.toString());
-		}
+	action extractVolatileOils(){
+		Component.setUserStatus(UserStatus.VOLATILE_OILS, currentVolatileOils.toString());
 	}
 	
-	/** 
-	...
-	*/	
 	action extractOrganicAcids(){
-		listener listen := on all wait (1.0){
-
-//			if statements here .....
-			
-			Component.setUserStatus(UserStatus.ORGANIC_ACIDS, currentOrganicAcids.toString());
-		}
+		Component.setUserStatus(UserStatus.ORGANIC_ACIDS, currentOrganicAcids.toString());
 	}
 	
 	/** 
 		Increases/decreases the temperature in the extractor drum;
-		
 	*/
 	action implementExtractorTemp(){
 		listener listen := on all wait (2.0){
-			//float randomTempIncrementor := (2.0).rand(); // TODO FIX MAGIC NUMBER;
-			if checkTempIfTooHigh() {
-				//randomTempIncrementor := -randomTempIncrementor;
-			}
+			listenForProblems();
 			Component.setUserStatus(UserStatus.EXTRACTOR_TEMP, currentTemp.toString());
 		}
 	}
-	
+
 	/** 
 	@param time = the time that has passed in seconds;
 	@param height = increase value for higher function and decrease for lower; 7.7 is a random default value;
@@ -145,41 +75,41 @@ monitor Extractor {
 	action blackBodyFormula(float time, float height, float length) returns float{
 		return (height * (length * time).pow(Math.CUBED)) / ( (float.E).pow(length * time) - Math.PLANCK_FORMULA_SUBTRACTOR);
 	}
-	
-	/** 
-	...
-	*/
-	action updateCoffeeToWaterRatio(){	
-		Component.setUserStatus(UserStatus.COFFEE_TO_WATER_RATIO, currentCoffeeToWaterRatio.toString());
-		//....
-	}
-	
-	/** 
-	@return ...
-	*/
-	action checkTempIfTooHigh() returns boolean{
-		if currentTemp >= Temperature.IMMINENT_FIRE {
-			lowExtractionTemp := false;
-			highExtractionTemp := true;	
+
+	action listenForProblems(){
+		if currentTemp >= Temperature.IMMINENT_FIRE{
+			log "Listen for problems ==== " at INFO;
+			send Alert(AlertType.HIGH_EXTRACTION_DRUM_HEAT) to Channel.EXTRACTOR_SIMULATOR;
 		}
-		return highExtractionTemp;
 	}
-	
-	/** 
-	@return ...
-	*/
-	action checkTempIfTooLow() returns boolean{
-		if currentTemp = Temperature.DRUM_MINIMUM {
-			lowExtractionTemp := true;
-			highExtractionTemp := false;
+
+	action updateCaffeine(){
+		on all CaffeineEvent() as ce{
+			currentCaffeine := ce.currentCaffeine;
+			log "CAFFEINE = " + currentCaffeine.toString() at INFO;
 		}
-		return lowExtractionTemp;
 	}
 	
-	action sendMessageToRoastSimulator(){
-		//send
+	action updateVolatileOils(){
+		on all VolatileOilsEvent() as voe{
+			currentVolatileOils := voe.currentVolatileOils;
+			log "VolatileOilsEvent = " + currentVolatileOils.toString() at INFO;
+		}
 	}
 	
+	action updateOrganicAcids(){
+		on all OrganicAcidsEvent() as oae{
+			currentOrganicAcids := oae.currentOrganicAcids;
+			log "OrganicAcidsEvent = " + currentOrganicAcids.toString() at INFO;
+		}
+	}
+	
+	action updateExtractorTemperature(){
+		on all ExtractorTemperature() as et{
+			currentTemp := et.currentTemperature;
+			log "ExtractorTemperature = " + currentTemp.toString() at INFO;
+		}
+	}
 }
 
 

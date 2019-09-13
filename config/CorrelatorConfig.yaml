@@ -14,7 +14,7 @@
 
 engineConnect:
     - sourceHost: localhost
-      sourcePort: 15904
+      sourcePort: 15903
 
       channels:
         - roastChannel
