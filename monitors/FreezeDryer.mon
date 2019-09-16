@@ -1,7 +1,7 @@
 using com.apama.correlator.Component;
 
-/** This monitor is responsible for ...  */
-
+/** This monitor is responsible for sending data to Prometheus and
+	for checking if there are any issues with the data per se */
 
 monitor FreezeDryer {
 	
@@ -30,15 +30,15 @@ monitor FreezeDryer {
 	}
 	
 	action implementMoisture(){
-		Component.setUserStatus(UserStatus.MOISTURE, currentMoisture.toString());
+		Component.setUserStatus(UserStatus.MOISTURE, currentMoisture.toString()); // send moisture data to Prometheus;
 	}
 	
 	action implementPressure(){
-		Component.setUserStatus(UserStatus.VACUUM, currentVacuum.toString());
+		Component.setUserStatus(UserStatus.VACUUM, currentVacuum.toString()); // send vacuum pressure data to Prometheus;
 	}
 	
 	action implementTemperature(){
-		Component.setUserStatus(UserStatus.FREEZER_DRYER_TEMP, currentTemp.toString());
+		Component.setUserStatus(UserStatus.FREEZER_DRYER_TEMP, currentTemp.toString());// send temperature data to Prometheus;
 	}
 	
 	action updateVariables(){
@@ -60,18 +60,21 @@ monitor FreezeDryer {
 		}
 	}
 
+	/** 
+		if the temperature in the tube is not stable i.e. is too high, stabilize it;
+	*/
 	action stabilize(){
-		if currentTemp >= 60.0 {
-			currentTemp := 59.0;
+		if currentTemp > Temperature.MAXIMUM_STABLE_TUBE_TEMP {
+			currentTemp := Temperature.STABILIZED_TUBE_TEMP;
 			send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER_SIMULATOR;
 		}
 	}
 	
 	action listenForProblems(){
-		if currentMoisture <= ExtractionBounds.MOISTURE_MINIMUM_TEMP_CELSIUS{
+		if currentMoisture <= FreezerDryer.MOISTURE_MINIMUM_TEMP_CELSIUS{
 			send Alert(AlertType.MINIMUM_MOISTURE_REACHED) to Channel.FREEZE_DRYER_SIMULATOR;
 		}	
-		if currentTemp >= Temperature.HIGH_TUBE_TEMP{
+		if currentTemp > Temperature.MAXIMUM_STABLE_TUBE_TEMP{
 			send Alert(AlertType.HIGH_TUBE_HEAT) to Channel.FREEZE_DRYER_SIMULATOR;
 		}		
 	}

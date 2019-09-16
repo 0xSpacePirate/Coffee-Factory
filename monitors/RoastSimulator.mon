@@ -17,13 +17,8 @@ monitor RoastDrumSimulator {
 	float currentDrumTemp := preheatDrum(); // default temp in drum before roasting is just below 200, e.g. 190;
 	float currentBeanVolt := BeanColorVolt.MAXIMUM; 
 	
-	boolean highRoastTemp := false; // used as a gate to decrease the temp;
-	boolean lowRoastTemp := true; // used as a gate to increase the temp;
-	
 	integer alertType := 0;
-	
-	boolean alertDetected := false;
-	
+		
 	listener listenHeatDrum;
 	listener listenColorTrack;
 	
@@ -38,14 +33,19 @@ monitor RoastDrumSimulator {
 	}
 	
 	/** 
-	@return ...
+		@return a number representing the initial value of the temperature within the drum;
 	*/
 	action preheatDrum() returns float{
 		return (Temperature.PREHEAT_NUMBER).rand() + BeanTemp.PALE;
 	}
 	
 	/** 
-		...
+		Listens and increases the temperate of the roast drum gradually, 
+		stops either when a high roast drum temperature alert is send or
+		when the color of the beans becomes way to extremely dark ~0.0;
+	
+		For more information about bean color @see colorTrack() action
+		within this monitor;
 	*/
 	action heatDrum(){		
 		listenHeatDrum := on all wait (2.0){
@@ -54,14 +54,25 @@ monitor RoastDrumSimulator {
 				listenForAlerts();
 				send DrumTemperature(currentDrumTemp) to Channel.ROAST;
 		}
-	}	
+	}
 	
 	/** 
-		....
+		Listens and decreases the volts DC gradually,
+		stops either when the temperate in the roast drum
+		is way too high or when the volts DC reach ~0.0 = way to extremely dark;
+	
+		Using a ColorTrack RT module device we detect the bean color,
+		the output coming from the laser module is expressed in a 0-10 Volt DC signal
+		(which in our case is multiplied by 10 just because working with numbers 0-100
+		looks better on Grafana, therefore 0-100) 
+	
+		Maximum = 100 (green beans);
+		Minimum = 0 (extremely dark beans);
+		
 	*/
 	action colorTrack(){
 		listenColorTrack := on all wait (1.0){
-				float randomVoltIncrease := (BeanTracker.COLOR_CHANGER).rand(); // the beans spin while in the drum, therefore their temperature might differ slightly. Plus, making the graph more realistic;
+				float randomVoltIncrease := (BeanTracker.COLOR_CHANGER).rand(); //the beans spin while in the drum, therefore their temperature might differ slightly.
 				float gate := (BeanRandom.GATE_BOUND).rand();
 				integer beanColorIllustrator := getBeanIllustrator(currentBeanVolt);
 				listenForAlerts();
@@ -71,8 +82,12 @@ monitor RoastDrumSimulator {
 	}
 	
 	/** 
-	@param gate ...
-	@param randomVoltIncrease ...
+		@param gate used to help simulate the data by generating a random number which
+	if it's within @see BeanTracker.Color_GATE_ENTRY bounds will increase the value of the volts on the graph;
+	
+		@param randomVoltIncrease increasing the value of the volt slightly,
+	used to simulate that the beans are not all evently roasted and there
+	are slight differences since the beans are spinning within a roast drum;
 	*/
 	action implementBeanVolt(float gate, float randomVoltIncrease){
 		if gate <= BeanTracker.COLOR_GATE_ENTRY {
@@ -83,9 +98,9 @@ monitor RoastDrumSimulator {
 	}
 	
 	/** 
-	@param beanVolt ...
-	@return ....
-		formula: the color scheme graph contains half the range the beanvolt has
+		@param beanVolt value is used to represent what the current color of the beans is;
+	
+		@return a formula value: the color scheme graph contains half the range the beanvolt has
 		(i.e. BeanVolt starts at 100 and goes down to 0, colorScheme starts at 0 and goes up to 50).
 		Hence, get half of bean volt and remove 50 since the colorScheme operates in the 0-50 range;
 	*/
@@ -93,26 +108,29 @@ monitor RoastDrumSimulator {
 		return (getHalf(beanVolt) - ColorScheme.SIZE).abs(); 
 	}
 	
+	/** 
+		@return half the value of a number;
+	*/
 	action getHalf(float value) returns integer{
 		return value.floor() / Divider.BY_HALF;
 	}
 	
+	/** 
+		Used to call all actions that check for specific alerts;
+	*/
 	action listenForAlerts(){
-		monitor.subscribe(Channel.ROAST_SIMULATOR);
-		checkRoastDrumHeat();
-		checkColorTracker();
+		monitor.subscribe(Channel.ROAST_SIMULATOR); // Channel on which we listen for alerts;
+		checkRoastDrumHeatIfTooHigh();
+		checkColorTrackerIfTooLow();
 	}
 		
-	action checkRoastDrumHeat(){
+	action checkRoastDrumHeatIfTooHigh(){
 		on all Alert(anAlert=AlertType.HIGH_ROAST_DRUM_HEAT){
-			reset();
-		}
-		on all Alert(anAlert=AlertType.LOW_ROAST_DRUM_HEAT){
 			reset();
 		}
 	}
 	
-	action checkColorTracker(){
+	action checkColorTrackerIfTooLow(){
 		on all Alert(anAlert=AlertType.COLOR_TRACKER_TOO_LOW){
 			reset();
 		}
@@ -121,14 +139,20 @@ monitor RoastDrumSimulator {
 	action reset(){
 		stopListeners();
 		on wait(1.0){
-			log "HEAT DRUM STOPPED. NEW BEANS IN!" at INFO;
 			resetRoastStageVariables();
-			send DrumTemperature(currentDrumTemp) to Channel.ROAST;
-			send ColorTrack(currentBeanVolt) to Channel.ROAST;	
+			sendResettedValues();
 		}
 		startOver();
 	}
 	
+	action sendResettedValues(){
+		send DrumTemperature(currentDrumTemp) to Channel.ROAST;
+		send ColorTrack(currentBeanVolt) to Channel.ROAST;
+	}
+	
+	/** 
+		Used to simulate that the drum is emptied and new beans are going in with an initial temperature;
+	*/
 	action startOver(){
 		heatDrum();
 		colorTrack();

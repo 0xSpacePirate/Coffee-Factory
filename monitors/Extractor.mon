@@ -1,6 +1,7 @@
 using com.apama.correlator.Component;
 
-/** This monitor is responsible for ...  */
+/** This monitor is responsible for sending data to Prometheus and
+	for checking if there are any issues with the data  */
 
 monitor Extractor {
 	
@@ -8,14 +9,6 @@ monitor Extractor {
 	float currentVolatileOils := 3.0;
 	float currentOrganicAcids := 8.0;
 	float currentTemp := 0.0;
-	float currentCoffeeToWaterRatio := 0.0;
-	
-	boolean highExtractionTemp := false; // used as a gate to decrease the temp;
-	boolean lowExtractionTemp := true; // used as a gate to increase the temp;
-	
-	float caffeineTimeCounter := 0.0;
-	float oilsTimeCounter := 0.0;
-	float acidsTimeCounter := 0.0;
 		
 	action onload() {
 		log Message.LOADED_EXTRACT at INFO;
@@ -29,7 +22,7 @@ monitor Extractor {
 	}
 	
 	action updateVariables(){
-		monitor.subscribe(Channel.EXTRACTOR);
+		monitor.subscribe(Channel.EXTRACTOR); // Channel on which we listen;
 		updateCaffeine();
 		updateVolatileOils();
 		updateOrganicAcids();
@@ -45,15 +38,15 @@ monitor Extractor {
 	}
 
 	action extractCaffeine(){
-		Component.setUserStatus(UserStatus.CAFFEINE, currentCaffeine.toString());
+		Component.setUserStatus(UserStatus.CAFFEINE, currentCaffeine.toString()); // sends data to Prometheus;
 	}
 
 	action extractVolatileOils(){
-		Component.setUserStatus(UserStatus.VOLATILE_OILS, currentVolatileOils.toString());
+		Component.setUserStatus(UserStatus.VOLATILE_OILS, currentVolatileOils.toString()); // sends data to Prometheus;
 	}
 	
 	action extractOrganicAcids(){
-		Component.setUserStatus(UserStatus.ORGANIC_ACIDS, currentOrganicAcids.toString());
+		Component.setUserStatus(UserStatus.ORGANIC_ACIDS, currentOrganicAcids.toString()); // sends data to Prometheus;
 	}
 	
 	/** 
@@ -61,24 +54,13 @@ monitor Extractor {
 	*/
 	action implementExtractorTemp(){
 		listener listen := on all wait (2.0){
-			listenForProblems();
+			checkIfTempTooHigh();
 			Component.setUserStatus(UserStatus.EXTRACTOR_TEMP, currentTemp.toString());
 		}
 	}
 
-	/** 
-	@param time = the time that has passed in seconds;
-	@param height = increase value for higher function and decrease for lower; 7.7 is a random default value;
-	@param length = increase to shrink function, decrease to expand function; 0.188 is a random default value;
-	@return Max Planck's formula for Black-body radition
-	*/
-	action blackBodyFormula(float time, float height, float length) returns float{
-		return (height * (length * time).pow(Math.CUBED)) / ( (float.E).pow(length * time) - Math.PLANCK_FORMULA_SUBTRACTOR);
-	}
-
-	action listenForProblems(){
+	action checkIfTempTooHigh(){
 		if currentTemp >= Temperature.IMMINENT_FIRE{
-			log "Listen for problems ==== " at INFO;
 			send Alert(AlertType.HIGH_EXTRACTION_DRUM_HEAT) to Channel.EXTRACTOR_SIMULATOR;
 		}
 	}
@@ -86,7 +68,7 @@ monitor Extractor {
 	action updateCaffeine(){
 		on all CaffeineEvent() as ce{
 			currentCaffeine := ce.currentCaffeine;
-			log "CAFFEINE = " + currentCaffeine.toString() at INFO;
+			log "Caffeine = " + currentCaffeine.toString() at INFO;
 		}
 	}
 	

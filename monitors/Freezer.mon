@@ -1,6 +1,6 @@
 using com.apama.correlator.Component;
 
-/** This monitor is responsible for ...  */
+/** This monitor is responsible for analyzing data, looking for issues, and sending the data to Prometheus */
 
 event FreezerTemperature{
 	float currentFreezerTemp;
@@ -8,7 +8,7 @@ event FreezerTemperature{
 
 monitor Freezer {
 	
-	float currentFreezerTemp := -50.0; // default freezer temperature;                       TODO: add value as a constant;
+	float currentFreezerTemp;
 	boolean flag := false; //When using the random variable we either decrease or
 	//increase the current freezer temperature, using this variable we set the turns;
 
@@ -20,16 +20,18 @@ monitor Freezer {
 	
 	action freeze(){
 		listener listen := on all wait (3.0){
-
-			Component.setUserStatus(UserStatus.FREEZER_TEMP, currentFreezerTemp.toString());
+			Component.setUserStatus(UserStatus.FREEZER_TEMP, currentFreezerTemp.toString()); // send freezer data to Prometheus;
 		}
 	}
 	
 	action updateVariables(){
-		monitor.subscribe(Channel.FREEZE);
+		monitor.subscribe(Channel.FREEZE); // Channel on which we listen for updates;
 		updateFreezerTemp();
 	}
 	
+	/**
+		Listens to the Freeze channel and updates the data correspondingly;
+	*/
 	action updateFreezerTemp(){
 		on all FreezerTemperature() as ft{
 			currentFreezerTemp := ft.currentFreezerTemp;

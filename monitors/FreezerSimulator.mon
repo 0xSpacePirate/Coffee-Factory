@@ -1,10 +1,11 @@
 
-/** This monitor is responsible for ...  */
+/** This monitor is responsible for simulating the Freezer data 
+	and sending it to the Producer monitor-Freezer.mon  */
 
 
 monitor FreezerSimulator {
 	
-	float currentFreezerTemp := -50.0; // default freezer temperature;
+	float currentFreezerTemp := Temperature.DEFAULT_FREEZER_TEMP; // default freezer temperature;
 	boolean flag := false; //When using the random variable we either decrease or
 	//increase the current freezer temperature, using this variable we set the turns;
 
@@ -13,15 +14,23 @@ monitor FreezerSimulator {
 		freeze();
 	}
 	
+	/**
+		Sends the data to the Producer monitor;
+	*/
 	action freeze(){
 		listener listen := on all wait (3.0){
 			float randomTemp := getRandomTemp();	
 			currentFreezerTemp := (currentFreezerTemp + randomTemp);
 			send FreezerTemperature(currentFreezerTemp) to Channel.FREEZE;
-			log "Simulation Freezer temp: " + currentFreezerTemp.toString() at INFO;
-
 		}
 	}
+	
+	/**
+		@returns random small value which will be either positive or negative (taking turns);
+		Used to simulate the data in a more realistic way;
+	
+		The values are not supposed to be stable, just random variations that go up and down;
+	*/
 	
 	action getRandomTemp() returns float{
 		float randomTemp := (FreezerTemp.RANDOM_FLUCTUATION_NUMBER).rand();

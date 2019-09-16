@@ -1,5 +1,7 @@
 using com.apama.correlator.Component;
 
+/** This monitor is responsible for checking for issues and sending the data to Prometheus  */
+
 monitor RoastDrum {
 	
 	integer beanIllustrator := 1; //parses the number so the program can display the actual color of the bean in a range from 1 to 100; Where 1 is green and very black is 100;
@@ -20,7 +22,7 @@ monitor RoastDrum {
 	}
 		
 	/** 
-		...
+		Sends temperature data to Prometheus making sure there are no issues;
 	*/
 	action heatDrum(){		
 		listener listen := on all wait (2.0){
@@ -31,7 +33,7 @@ monitor RoastDrum {
 	}	
 
 	/** 
-		....
+		Sends the color track data to Prometheus making sure the data has no issues;
 	*/
 	action colorTrack(){		
 		listener listen := on all wait (1.0){
@@ -53,7 +55,7 @@ monitor RoastDrum {
 	}
 
 	action updateVariables(){
-		monitor.subscribe(Channel.ROAST);
+		monitor.subscribe(Channel.ROAST); // listens to the corresponding channel;
 		updateTemp();
 		updateColorTrack();
 	}
@@ -71,9 +73,8 @@ monitor RoastDrum {
 	}
 	
 	/** 
-	@param beanVolt ...
-	@return ....
-		formula: the color scheme graph contains half the range the beanvolt has
+	@param the current beanVolt value i.e. the value that corresponds to the current bean color;
+	@return the output of the formula: the color scheme graph contains half the range the beanvolt has
 		(i.e. BeanVolt starts at 100 and goes down to 0, colorScheme starts at 0 and goes up to 50).
 		Hence, get half of bean volt and remove 50 since the colorScheme operates in the 0-50 range;
 	*/

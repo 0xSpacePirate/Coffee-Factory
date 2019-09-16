@@ -1,5 +1,6 @@
 
-/** This monitor is responsible for ...  */
+/** This monitor is responsible for simulating the extractor data  */
+
 event CaffeineEvent{
 	float currentCaffeine;
 }
@@ -29,6 +30,7 @@ monitor ExtractorSimulator {
 	
 	float timeCounterSecs := 0.0;
 	
+	//============================================
 	//randomly selected numbers, used to create diversity,
 	//making the graphs always with a different height/length from before;
 	float caffeineGraphHeightRandom := (1.5).rand();
@@ -39,10 +41,10 @@ monitor ExtractorSimulator {
 	
 	float acidsGraphHeightRandom := (0.2).rand();
 	float acidsGraphLengthRandom := (0.0027).rand();
+	// ============================================
 	
-	listener listen;
-
-	listener temperature;
+	listener extractsListener;
+	listener temperatureListener;
 	
 	action onload() {
 		log Message.LOADED_EXTRACT_SIMULATOR at INFO;
@@ -56,38 +58,43 @@ monitor ExtractorSimulator {
 	}
 
 	action extractAll(){
-		listen := on all wait (1.0){
+		extractsListener := on all wait (1.0){
 			extractCaffeine();
 			extractVolatileOils();
 			extractOrganicAcids();
-			timeCounterSecs := timeCounterSecs + 1.0;
+			timeCounterSecs := timeCounterSecs + 1.0; // add a second;
 		}
 	}
 
+	/** 
+		Updates the value of caffeine on Grafana;
+	*/
 	action extractCaffeine(){
 		currentCaffeine := blackBodyFormula(timeCounterSecs, getCaffeineGraphHeight(), getCaffeineGraphLength());  
 		send CaffeineEvent(currentCaffeine) to Channel.EXTRACTOR; 
-		log "Caffeine ==== " + currentCaffeine.toString() at INFO;
-	}
-	
-
-	action extractVolatileOils(){
-		currentVolatileOils := blackBodyFormula(timeCounterSecs, getVolatileOilsGraphHeight(), getVolatileOilsGraphLength());	
-		send VolatileOilsEvent(currentVolatileOils) to Channel.EXTRACTOR; 
-		log "Volatile oils ==== " + currentVolatileOils.toString() at INFO;
-	}
-	
-	action extractOrganicAcids(){
-		currentOrganicAcids := blackBodyFormula(timeCounterSecs, getOrganicAcidsGraphHeight(), getOrganicAcidsLenght()); 
-		send OrganicAcidsEvent(currentOrganicAcids) to Channel.EXTRACTOR; 
-		log "Organic acids ==== " + currentOrganicAcids.toString() at INFO;
 	}
 	
 	/** 
-		Increases/decreases the temperature in the extractor drum;
+		Updates the value of volatile oils on Grafana;
+	*/
+	action extractVolatileOils(){
+		currentVolatileOils := blackBodyFormula(timeCounterSecs, getVolatileOilsGraphHeight(), getVolatileOilsGraphLength());	
+		send VolatileOilsEvent(currentVolatileOils) to Channel.EXTRACTOR; 
+	}
+	
+	/** 
+		Updates the value of organic acids on Grafana;
+	*/
+	action extractOrganicAcids(){
+		currentOrganicAcids := blackBodyFormula(timeCounterSecs, getOrganicAcidsGraphHeight(), getOrganicAcidsLenght()); 
+		send OrganicAcidsEvent(currentOrganicAcids) to Channel.EXTRACTOR; 
+	}
+	
+	/** 
+		Updates the temperature in the extractor drum;
 	*/
 	action implementExtractorTemp(){
-		temperature := on all wait (2.0){
+		temperatureListener := on all wait (2.0){
 			float randomTempIncrementor := (2.0).rand(); // TODO FIX MAGIC NUMBER;
 			currentTemp := currentTemp + randomTempIncrementor;
 			send ExtractorTemperature(currentTemp) to Channel.EXTRACTOR; 
@@ -100,11 +107,7 @@ monitor ExtractorSimulator {
 	}
 	
 	action listenForExtractionDrumTemp(){
-		on all Alert() as a{
-			log "123456 =  " + a.toString() at INFO;
-		}
 		on all Alert(anAlert=AlertType.HIGH_EXTRACTION_DRUM_HEAT){
-			log "anAlert=AlertType.HIGH_EXTRACTION_DRUM_HEAT ================" at INFO;
 			reset();
 		}
 	}
@@ -112,14 +115,7 @@ monitor ExtractorSimulator {
 	action reset(){
 		stopListeners();
 		on wait(1.0){
-			log "EXTRACTOR DRUM STOPPED. NEW BEANS IN!" at INFO;
 			resetExtractStageVariables();
-			
-			log "EXTRACTOR DRUM STOPPED. CAFFEINE = " + currentCaffeine.toString() at INFO;
-			log "EXTRACTOR DRUM STOPPED. VolatileOilsEvent = " + currentVolatileOils.toString() at INFO;
-			log "EXTRACTOR DRUM STOPPED. OrganicAcidsEvent = " + currentOrganicAcids.toString() at INFO;
-			log "EXTRACTOR DRUM STOPPED. ExtractorTemperature = " + currentTemp.toString() at INFO;
-
 			send CaffeineEvent(currentCaffeine) to Channel.EXTRACTOR;
 			send VolatileOilsEvent(currentVolatileOils) to Channel.EXTRACTOR;
 			send OrganicAcidsEvent(currentOrganicAcids) to Channel.EXTRACTOR;
@@ -128,6 +124,9 @@ monitor ExtractorSimulator {
 		startOver();
 	}
 	
+	/** 
+		Used to simulate that new beans are going into the extractor drum;
+	*/
 	action startOver(){
 		extractAll();
 		implementExtractorTemp();
@@ -142,18 +141,26 @@ monitor ExtractorSimulator {
 	}
 	
 	action stopListeners(){
-		 listen.quit();
-		 temperature.quit();
+		extractsListener.quit();
+		temperatureListener.quit();
 	}
 	
 	/** 
 	@param time = the time that has passed in seconds;
 	@param height = increase value for higher function and decrease for lower; 7.7 is a random default value;
 	@param length = increase to shrink function, decrease to expand function; 0.188 is a random default value;
-	@return Max Planck's formula for Black-body radition
+	@return Max Planck's formula for Black-body radition, used because it produces good looking functions on Grafana;
 	*/
 	action blackBodyFormula(float time, float height, float length) returns float{
-		return (height * (length * time).pow(Math.CUBED)) / ( (float.E).pow(length * time) - Math.PLANCK_FORMULA_SUBTRACTOR);
+		return (height * (length * time).pow(3.0)) / ( (float.E).pow(length * time) - Math.PLANCK_FORMULA_SUBTRACTOR);
+	}
+	
+	/** 
+		Initializes the initial temperature in the extractor drum;
+		Adding a random number is used to make the initial value different each time;
+	*/
+	action preheatExtractor() returns float{
+		return (Temperature.EXTRACTOR_PREHEAT).rand() + Temperature.EXTRACTOR_INITIAL;
 	}
 	
 	action getCaffeineGraphHeight() returns float{
@@ -178,10 +185,6 @@ monitor ExtractorSimulator {
 	
 	action getOrganicAcidsLenght() returns float{
 		return OrganicAcids.GRAPH_LENGTH - acidsGraphLengthRandom; 
-	}
-	
-	action preheatExtractor() returns float{
-		return (Temperature.EXTRACTOR_PREHEAT).rand() + Temperature.EXTRACTOR_INITIAL;
 	}
 	
 }

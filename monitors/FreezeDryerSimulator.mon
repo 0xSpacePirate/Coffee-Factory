@@ -1,5 +1,5 @@
 
-/** This monitor is responsible for ...  */
+/** This monitor is responsible for simulating the data for the Freezer Dryer*/
 
 event FreezerDryerMoisture{
 	float currentMoisture;
@@ -21,8 +21,6 @@ event BadEvent{
 	float temperatureIncrease;
 }
 
-//TODO: tube stuff -> add button click -> something wrong happens -> fix;
-
 monitor FreezeDryerSimulator {
 
 	float currentMoisture := 100.0;
@@ -32,6 +30,8 @@ monitor FreezeDryerSimulator {
 	listener moistureListener;
 	listener tubeTempListener;
 	listener vacuumPressureListener;
+	
+	
 	
 	action onload() {
 		initialize();
@@ -44,29 +44,48 @@ monitor FreezeDryerSimulator {
 		implementTubeVacuum();
 		listenForAlerts();
 	}
-		
+	
+	/** 
+		Decreases the moisture of the already powdered coffee beans. The moisture is displayed on Grafana;
+	*/
 	action moistureEvaporating(){
 		moistureListener := on all wait (2.0){
 			float random := (FreezerDryer.RANDOM_FLUCTUATION_NUMBER).rand();
 			currentMoisture := currentMoisture - random;
-			log "MOISTURE -> SIMULATOR = " + currentMoisture.toString() at INFO;
 			send FreezerDryerMoisture(currentMoisture) to Channel.FREEZE_DRYER;
 		}
 	}
 	
+	/** 
+		Displays the temperature in the tube. The temperature value fluctuates constantly so 
+		it looks way more realistic that is why you can find the random variable in the action;
+	
+		The random variable, shouldn't be more than 1.1 and less than 0.9; Otherwise the values will not follow
+		the instant coffee making rules related to the temperature; 
+	*/
 	action implementTubeTemperature(){
 		tubeTempListener := on all wait (3.0){
-			float random := (1.0).rand(); // TODO: Add explaination...
-			float tempGate := (1.0).rand();			
+			float random := (1.0).rand();  // random number, should'nt be more than 1.2 and less than 0.8;
+			//Otherwise the values will not follow the instant coffee making rules related to the temperature;
+			float tempGate := (1.0).rand(); // used to either increase or decrease the value, depending
+			//on its value and the FreezerDryer fluctuation threshold;	
 			currentTemp := implementFluctuation(tempGate, currentTemp, random);
 			send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
 		}
 	}
 	
+	/** 
+		Displays the vacuum pressure within the tube. The value fluctuates constantly using the random variable;
+	
+		The random variable, shouldn't be more than 1.1 and less than 0.9; Otherwise the values will not follow
+		the instant coffee making rules related to the temperature; 
+	*/
 	action implementTubeVacuum(){
 		vacuumPressureListener := on all wait (2.0){
-			float random := (1.0).rand(); // TODO: Add explaination...
-			float vacuumGate := (1.0).rand();
+			float random := (1.0).rand();  //Used to generate a random number which will be later on
+			//added or deducted from the currentValue; The point is to create a more realistic graphs;
+			float vacuumGate := (1.0).rand(); // used to either increase or decrease the value, depending
+			//on its value and the FreezerDryer fluctuation threshold;	
 			currentVacuum := implementFluctuation(vacuumGate, currentVacuum, random);
 			send FreezerDryerVacuum(currentVacuum) to Channel.FREEZE_DRYER;
 		}
@@ -74,51 +93,52 @@ monitor FreezeDryerSimulator {
 	
 	action listenForAlerts(){
 		monitor.subscribe(Channel.FREEZE_DRYER_SIMULATOR);
-		checkMoisture();
-		checkTube();
-		checkForBadEvents();
+		listenToMoisture();
+		listenToTube();
+		listenForBadEvents();
 		listenToStabilizer();
 	}
 	
-	action checkMoisture(){
+	action listenToMoisture(){
 		on all Alert(anAlert=AlertType.MINIMUM_MOISTURE_REACHED){
 			reset();
 		}
 	}
 	
-	action checkTube(){
+	action listenToTube(){
 		on all Alert(anAlert=AlertType.HIGH_TUBE_HEAT){
 			reset();
 		}
 	}
 	
+	/** 
+		Listens to the temp of the FreezerDryerTemp which if goes above a certain threshold is updated;
+	*/
 	action listenToStabilizer(){
 		on all FreezerDryerTemp() as fdt{
 			currentTemp := fdt.currentTemp;
 		}
 	}
 	
-	action checkForBadEvents(){
+	action listenForBadEvents(){
 		on all BadEvent() as be{
 			currentTemp := currentTemp + be.temperatureIncrease;
 		}
 	}
 	
-	action asd(){
-		
-	}
-	
 	action reset(){
 		stopListeners();
 		on wait(1.0){
-			log "FreezeDryer STOPPED. NEW BEANS IN!" at INFO;
 			resetFreezerDryerVariables();
-			send FreezerDryerMoisture(currentMoisture) to Channel.FREEZE_DRYER;
-			send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
-			send FreezerDryerVacuum(currentVacuum) to Channel.FREEZE_DRYER;
-			
+			sendResettedValues();
 		}
 		startOver();
+	}
+	
+	action sendResettedValues(){
+		send FreezerDryerMoisture(currentMoisture) to Channel.FREEZE_DRYER;
+		send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
+		send FreezerDryerVacuum(currentVacuum) to Channel.FREEZE_DRYER;		
 	}
 	
 	action startOver(){
@@ -128,9 +148,9 @@ monitor FreezeDryerSimulator {
 	}
 	
 	action resetFreezerDryerVariables(){
-		currentMoisture := 100.0;
-		currentTemp := 60.0;
-		currentVacuum := 150.0;
+		currentMoisture := FreezerDryer.MOISTURE_DEFAULT_VALUE;
+		currentTemp := FreezerDryer.TUBE_TEMP_DEFAULT_VALUE;
+		currentVacuum := FreezerDryer.VACUUM_PRESSURE_DEFAULT_VALUE;
 	}
 
 	action stopListeners(){
@@ -139,9 +159,18 @@ monitor FreezeDryerSimulator {
 		vacuumPressureListener.quit();
 	}
 	
-
+	/** 
+		@param gate used to help simulate the data by generating a random number which
+		will increase the value of the volts on the graph with about 50-50 percent
+		chance of increasing or decreasing the value;
+	
+		@param curretValue represents the currentValue of the passed variable which will be update;
+		@param randomNumber the amount which will be added or subtracted;
+	
+		@returns the updated @param currentValue
+	*/
 	action implementFluctuation(float gate, float currentValue, float randomNumber) returns float{
-		if gate <= 0.5 {
+		if gate <= FreezerDryer.FLUCTUATION_THRESHOLD {
 			currentValue := currentValue - randomNumber;
 		}else{
 			currentValue := currentValue + randomNumber;
