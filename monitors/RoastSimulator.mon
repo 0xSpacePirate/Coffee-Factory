@@ -83,11 +83,11 @@ monitor RoastDrumSimulator {
 	
 	/** 
 		@param gate used to help simulate the data by generating a random number which
-	if it's within @see BeanTracker.Color_GATE_ENTRY bounds will increase the value of the volts on the graph;
+		if it's within @see BeanTracker.Color_GATE_ENTRY bounds will increase the value of the volts on the graph;
 	
 		@param randomVoltIncrease increasing the value of the volt slightly,
-	used to simulate that the beans are not all evently roasted and there
-	are slight differences since the beans are spinning within a roast drum;
+		used to simulate that the beans are not all evently roasted and there
+		are slight differences since the beans are spinning within a roast drum;
 	*/
 	action implementBeanVolt(float gate, float randomVoltIncrease){
 		if gate <= BeanTracker.COLOR_GATE_ENTRY {
