@@ -48,18 +48,6 @@ monitor FreezeDryer {
 		updateMoisture();
 	}
 	
-	action updateMoisture(){
-		on all FreezerDryerMoisture() as fde{
-			currentMoisture := fde.currentMoisture;
-		}
-	}
-	
-	action updateTemp(){
-		on all FreezerDryerTemp() as fdm{
-			currentTemp := fdm.currentTemp;
-		}
-	}
-
 	/** 
 		if the temperature in the tube is not stable i.e. is too high, stabilize it;
 	*/
@@ -82,6 +70,18 @@ monitor FreezeDryer {
 	action updateVacuum(){
 		on all FreezerDryerVacuum() as fdv{
 			currentVacuum := fdv.currentVacuum;
+		}
+	}
+	
+	action updateMoisture(){
+		on all FreezerDryerMoisture() as fde{
+			currentMoisture := fde.currentMoisture;
+		}
+	}
+	
+	action updateTemp(){
+		on all FreezerDryerTemp() as fdm{
+			currentTemp := fdm.currentTemp;
 		}
 	}
 }

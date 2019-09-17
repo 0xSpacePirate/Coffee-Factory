@@ -126,7 +126,7 @@ event Temperature{
 	constant float FREEZER_MAX := -60.0;
 	constant float FREEZER_MIN := -20.0;
 	
-	constant float MAXIMUM_STABLE_TUBE_TEMP := 60.0;
+	constant float MAXIMUM_STABLE_TUBE_TEMP := 70.0;
 	constant float STABILIZED_TUBE_TEMP := 59.0;
 	
 	constant float DEFAULT_FREEZER_TEMP := -50.0;

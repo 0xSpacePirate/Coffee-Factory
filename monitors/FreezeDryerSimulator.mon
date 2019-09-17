@@ -65,10 +65,11 @@ monitor FreezeDryerSimulator {
 	*/
 	action implementTubeTemperature(){
 		tubeTempListener := on all wait (3.0){
-			float random := (1.0).rand();  // random number, should'nt be more than 1.2 and less than 0.8;
-			//Otherwise the values will not follow the instant coffee making rules related to the temperature;
-			float tempGate := (1.0).rand(); // used to either increase or decrease the value, depending
-			//on its value and the FreezerDryer fluctuation threshold;	
+			float random := (1.0).rand();  		// random number, should'nt be more than 1.2 and less than 0.8;
+										  		//Otherwise the values will not follow the instant coffee making rules related to the temperature;
+			
+			float tempGate := (1.0).rand(); 	// used to either increase or decrease the value, depending
+												//on its value and the FreezerDryer fluctuation threshold;	
 			currentTemp := implementFluctuation(tempGate, currentTemp, random);
 			send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
 		}
@@ -82,10 +83,11 @@ monitor FreezeDryerSimulator {
 	*/
 	action implementTubeVacuum(){
 		vacuumPressureListener := on all wait (2.0){
-			float random := (1.0).rand();  //Used to generate a random number which will be later on
-			//added or deducted from the currentValue; The point is to create a more realistic graphs;
-			float vacuumGate := (1.0).rand(); // used to either increase or decrease the value, depending
-			//on its value and the FreezerDryer fluctuation threshold;	
+			float random := (1.0).rand();  		//Used to generate a random number which will be later on
+												//added or deducted from the currentValue; The point is to create a more realistic graphs;
+			
+			float vacuumGate := (1.0).rand(); 	// used to either increase or decrease the value, depending
+												//on its value and the FreezerDryer fluctuation threshold;	
 			currentVacuum := implementFluctuation(vacuumGate, currentVacuum, random);
 			send FreezerDryerVacuum(currentVacuum) to Channel.FREEZE_DRYER;
 		}
