@@ -46,12 +46,10 @@ To start the project:
 
 In about couple of seconds the live data will be displayed on Grafana;
 
-
-
-
-A photo of the project in action: https://imgur.com/a/2BEoMwF;
-
 For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
+
+![alt text](https://github.com/POBnH4/Coffee-Factory/blob/master/BlogFinal.png)
+
 
 
 
