@@ -18,13 +18,6 @@ Prometheus:
 - Go to the folder which contains the installation and open the prometheus.yml file by right clicking on it and select a suitable text reader(notepad might not work), for example, I use Notepad++ to open it. Another thing you can do to open the file is: drag and drop the prometheus.yml file onto Designer.
 - Once opened, at the very bottom make sure it looks like this:
 
-  scrape_configs:
-    # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-    - job_name: 'prometheus'
-
-    # metrics_path defaults to '/metrics'
-    # scheme defaults to 'http'.
-
     static_configs:
     - targets: ['localhost:15903']
 
