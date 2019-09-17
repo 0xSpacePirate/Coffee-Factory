@@ -30,12 +30,28 @@ open the folder 'Grafana' in your Designer project and in it you would see a gra
 - In that page click JSON model, paste here what you copied from the grafana.json file in Designer project.
 - Click 'Save Changes'.
 
+- Now go to 'Configuration'
+- Click on the Prometheus field (should be in the center of the screen);
+- Update the URL to: http://localhost:9090
+- Update the Scrape Interval to 1s
+
+
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
+
+
+To start the project:
+- Right click on the project folder within Grafana;
+- Select 'Run as'
+- Select 'Apama Application'
+
+In about couple of seconds the live data will be displayed on Grafana;
+
+
 
 
 A photo of the project in action: https://imgur.com/a/2BEoMwF;
 
 For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
-
 
 
 
