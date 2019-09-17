@@ -21,7 +21,7 @@ Prometheus:
     static_configs:
     - targets: ['localhost:15903']
 
-You will have to just set the 'targets' to ['localhost:15903'];
+  You will have to just set the 'targets' to ['localhost:15903'];
 
  
 Grafana:
