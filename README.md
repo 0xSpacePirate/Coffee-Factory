@@ -32,8 +32,9 @@ open the folder 'Grafana' in your Designer project and in it you would see a gra
 
 
 
-A photo of the project in action: https://imgur.com/a/2BEoMwF
-For more information about the project and how it works see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
+A photo of the project in action: https://imgur.com/a/2BEoMwF;
+
+For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
 
 
 
