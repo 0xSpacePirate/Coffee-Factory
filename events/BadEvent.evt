@@ -10,4 +10,4 @@
 // ... the following events could be used in an event (.evt) file:
 // Measurement("Carrera_1",{"Temperature":any(Temperature,Temperature("Celsius",23))},optional(1495619586.1))
 // Measurement("Carrera_2",{"Speed":any(Speed,Speed("mph",20)),"Temperature":any(Temperature,Temperature("Celsius",23))},optional())
-BadEvent(29.11)
+BadEvent(13.11)

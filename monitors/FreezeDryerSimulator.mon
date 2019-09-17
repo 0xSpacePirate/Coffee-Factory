@@ -109,7 +109,7 @@ monitor FreezeDryerSimulator {
 	
 	action listenToTube(){
 		on all Alert(anAlert=AlertType.HIGH_TUBE_HEAT){
-			reset();
+			resetTubeDueToBadEvent();
 		}
 	}
 	
@@ -126,6 +126,11 @@ monitor FreezeDryerSimulator {
 		on all BadEvent() as be{
 			currentTemp := currentTemp + be.temperatureIncrease;
 		}
+	}
+	
+	action resetTubeDueToBadEvent(){
+		currentTemp := FreezerDryer.TUBE_TEMP_DEFAULT_VALUE;
+		send FreezerDryerTemp(currentTemp) to Channel.FREEZE_DRYER;
 	}
 	
 	action reset(){
