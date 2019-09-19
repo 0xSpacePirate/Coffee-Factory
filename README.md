@@ -10,7 +10,9 @@
 
 # Designer: 
 
-- Clone the repository
+- Clone the repository to a desired location.
+- If you do not have Designer on your machine, use this link to download it: http://www.apamacommunity.com/downloads/
+- Open the Project via Designer
 
 
 
