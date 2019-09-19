@@ -1,11 +1,17 @@
 # Coffee-Factory
 
+For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
+
+
+
 How to set up the project:
+
 
 
 Designer: 
 
 - Clone the repository
+
 
 
 Prometheus:
@@ -19,6 +25,8 @@ Prometheus:
     - targets: ['localhost:15903']
 
   You will have to just set the 'targets' to ['localhost:15903'];
+
+
 
  
 Grafana:
@@ -45,8 +53,6 @@ To start the project:
 - Select 'Apama Application'
 
 In about couple of seconds the live data will be displayed on Grafana;
-
-For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
 
 ![alt text](https://github.com/POBnH4/Coffee-Factory/blob/master/BlogFinal.png)
 
