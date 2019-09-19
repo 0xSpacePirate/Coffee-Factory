@@ -1,20 +1,20 @@
 # Coffee-Factory
 
-For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
+###For more information about the project see https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
 
 
 
-How to set up the project:
+#How to set up the project:
 
 
 
-Designer: 
+#Designer: 
 
 - Clone the repository
 
 
 
-Prometheus:
+#Prometheus:
 
 - Go to https://prometheus.io/download/ and download Prometheus (should be on the very top) by choosing the file that corresponds to your OS.
 - Install Prometheus to a suitable directory.
@@ -29,7 +29,7 @@ Prometheus:
 
 
  
-Grafana:
+#Grafana:
 
 Firstly, follow this link: https://grafana.com/docs/guides/getting_started/
 - Once you do the first two steps i.e. installation guide & logging in for the first time,
@@ -47,7 +47,7 @@ open the folder 'Grafana' in your Designer project and in it you would see a gra
 -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 
 
-To start the project:
+###To start the project:
 - Right click on the project folder within Grafana;
 - Select 'Run as'
 - Select 'Apama Application'
