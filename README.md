@@ -12,7 +12,8 @@ https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
 ###  Designer: 
 
 - Clone the repository to a desired location
-- If you do not have Designer on your machine, use this link to download it: http://www.apamacommunity.com/downloads/ (under Full version)
+- If you do not have Designer on your machine, use this link to download it: 
+  http://www.apamacommunity.com/downloads/ (under Full version)
 - Open the Project via Designer
 
 
