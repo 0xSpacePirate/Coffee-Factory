@@ -52,7 +52,7 @@ open the folder 'Grafana' in your Designer project and in it you would see a gra
 
 
 # To start the project:
-- Right click on the project folder.
+- In Designer, right click on the project folder.
 - Select 'Run as'
 - Select 'Apama Application'
 
