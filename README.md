@@ -11,8 +11,8 @@ https://iwiki.eur.ad.sag/display/apama/Coffee+Factory+Blog
 
 ###  Designer: 
 
-- Clone the repository to a desired location.
-- If you do not have Designer on your machine, use this link to download it: http://www.apamacommunity.com/downloads/
+- Clone the repository to a desired location
+- If you do not have Designer on your machine, use this link to download it: http://www.apamacommunity.com/downloads/ (under Full version)
 - Open the Project via Designer
 
 
@@ -51,11 +51,11 @@ open the folder 'Grafana' in your Designer project and in it you would see a gra
 
 
 # To start the project:
-- Right click on the project folder;
+- Right click on the project folder.
 - Select 'Run as'
 - Select 'Apama Application'
 
-In about couple of seconds the live data will be displayed on Grafana;
+In about couple of seconds the live data will be displayed on Grafana.
 
 ![alt text](https://github.com/POBnH4/Coffee-Factory/blob/master/BlogFinal.png)
 
