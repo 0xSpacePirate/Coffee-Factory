@@ -1,6 +1,6 @@
 using com.apama.correlator.Component;
 
-/** This monitor is responsible for checking for issues and sending the data to Prometheus  */
+/** This monitor is responsible for checking if there are any issues with the data */
 
 monitor RoastDrum {
 	

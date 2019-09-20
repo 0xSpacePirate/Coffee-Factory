@@ -7,7 +7,7 @@ event DrumTemperature{
 	float currentDrumTemperature;
 }
 
-/** This monitor is responsible for ...  */
+/** This monitor is responsible for simulating the data and sending it to RoastDrum.mon  */
 
 monitor RoastDrumSimulator {
 

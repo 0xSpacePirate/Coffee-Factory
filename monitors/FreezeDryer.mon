@@ -1,7 +1,6 @@
 using com.apama.correlator.Component;
 
-/** This monitor is responsible for sending data to Prometheus and
-	for checking if there are any issues with the data per se */
+/** This monitor is responsible for checking if there are any issues with the data per se */
 
 monitor FreezeDryer {
 	
