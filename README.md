@@ -40,6 +40,7 @@ Firstly, follow this link: https://grafana.com/docs/guides/getting_started/
 open the folder 'Grafana' in your Designer project and in it you would see a grafana.json file, copy the content of the file.
 - Go to Grafana, click 'Create' (the plus button at the top left corner) and then click 'dashboard settings' (on top right) which will take you to another page.
 - In that page click JSON model, paste here what you copied from the grafana.json file in Designer project.
+- Scroll to the top of the JSON model text and change the value of the 'id' to be 'null' (without quotes);
 - Click 'Save Changes'.
 
 - Now go to 'Configuration'
