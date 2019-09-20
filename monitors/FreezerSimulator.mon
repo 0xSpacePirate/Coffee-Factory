@@ -11,6 +11,7 @@ monitor FreezerSimulator {
 
 	action onload() {
 		log Message.LOADED_FREEZER_SIMULATOR at INFO;
+		listenForAlerts();
 		freeze();
 	}
 	
@@ -25,6 +26,24 @@ monitor FreezerSimulator {
 		}
 	}
 	
+	action listenForAlerts(){
+		monitor.subscribe(Channel.FREEZER_SIMULATOR);
+		listenForFreezerTemp();
+	}
+	
+	action listenForFreezerTemp(){
+		on all Alert(anAlert=AlertType.FREEZER_TOO_HIGH_TEMP){
+			reset();
+		}
+	}
+	
+	action reset(){
+		on wait(1.0){
+			currentFreezerTemp := Temperature.DEFAULT_FREEZER_TEMP;
+			send FreezerTemperature(currentFreezerTemp) to Channel.FREEZE;
+		}
+	}
+		
 	/**
 		@returns random small value which will be either positive or negative (taking turns);
 		Used to simulate the data in a more realistic way;

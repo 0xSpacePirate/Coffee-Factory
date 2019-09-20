@@ -10,6 +10,8 @@ event AlertType{
 
 	constant integer COLOR_TRACKER_TOO_LOW := 7;
 	constant integer MINIMUM_MOISTURE_REACHED := 8;
+	
+	constant integer FREEZER_TOO_HIGH_TEMP := -10; //shouldn't be more than -20;
 
 }
 
@@ -124,7 +126,7 @@ event Temperature{
 	constant float EXTRACTOR_PREHEAT := 12.1;  //A random number; The random number has to be lower than 20 and higher than 10;
 	
 	constant float FREEZER_MAX := -60.0;
-	constant float FREEZER_MIN := -20.0;
+	constant float FREEZER_MIN := -10.0;
 	
 	constant float MAXIMUM_STABLE_TUBE_TEMP := 70.0;
 	constant float STABILIZED_TUBE_TEMP := 59.0;

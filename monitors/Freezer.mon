@@ -20,7 +20,14 @@ monitor Freezer {
 	
 	action freeze(){
 		listener listen := on all wait (3.0){
+			checkIfTempTooHigh();
 			Component.setUserStatus(UserStatus.FREEZER_TEMP, currentFreezerTemp.toString()); // send freezer data to Prometheus;
+		}
+	}
+	
+	action checkIfTempTooHigh(){
+		if currentFreezerTemp <= Temperature.FREEZER_MIN{
+			send Alert(AlertType.FREEZER_TOO_HIGH_TEMP) to Channel.FREEZER_SIMULATOR;
 		}
 	}
 	
