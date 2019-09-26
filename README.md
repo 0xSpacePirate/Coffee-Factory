@@ -59,6 +59,8 @@ open the folder 'Grafana' in your Designer project and in it you would see a gra
 
 In about couple of seconds the live data will be displayed on Grafana.
 
+And if you would like to send a bad event go to Designer. Find the coffee project and start it if it is not on. Open the events folder and you will see a BadEvent.evt file. Right-click on it and select Apama -> Send Events.Now observe how Apama will handle the bad event on Grafana.
+
 ![alt text](https://github.com/POBnH4/Coffee-Factory/blob/master/BlogFinal.png)
 
 
